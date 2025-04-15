@@ -31,7 +31,7 @@ class KonselorController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role' => $validated['role'],
+            'role' => 'KONSELOR',
         ]);
 
         return redirect()->back()->with('success', 'User berhasil dibuat.');
@@ -48,24 +48,27 @@ class KonselorController extends Controller
 
     public function update(Request $request, $id) { 
         // Validasi input
-        $validated = $request->validate([
+        $requestParameter = [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|string',
-        ]);
+        ];
+
+        if ($request->filled('password')) {
+            $requestParameter['password'] = 'required|string|min:8|confirmed';
+        }
+
+        $validated = $request->validate($requestParameter);
 
         // Update ke database
         $user = User::findOrFail($id);
         $user->name = $validated['name'];
-        $user->email = $validated['email'];
         if ($request->filled('password')) {
             $user->password = Hash::make($validated['password']);
         }
-        $user->role = $validated['role'];
         $user->save();
 
-        return redirect()->back()->with('success', 'User berhasil diperbarui.');
+        $users = User::all()->where('role', '==', 'KONSELOR');
+
+        return redirect('/konselor')->with('success', 'User berhasil diperbarui.');
     }
     public function destroy($id) { /* delete product */ }
 

@@ -31,7 +31,7 @@
                 <!-- Email -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-                    <input type="email" name="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg" value="{{ old('email', $isEdit ? $detail->email : '') }}">
+                    <input type="email" name="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg" value="{{ old('email', $isEdit ? $detail->email : '') }}" {{ $isEdit ? 'disabled' : '' }} >
                     @error('email') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
 
@@ -46,18 +46,6 @@
                 <div>
                     <label for="password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Konfirmasi Password</label>
                     <input type="password" name="password_confirmation" id="password_confirmation" class="mt-1 block w-full rounded-md border-gray-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg">
-                </div>
-
-                <!-- Role -->
-                <div>
-                    <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Role</label>
-                    <select name="role" id="role" class="mt-1 block w-full rounded-md border-gray-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-l">
-                        <option value="">-- Pilih Role --</option>
-                        {{-- <option value="ADMIN" {{ old('role') == 'ADMIN' ? 'selected' : '' }}>ADMIN</option>
-                        <option value="CABANG" {{ old('role') == 'CABANG' ? 'selected' : '' }}>CABANG</option> --}}
-                        <option value="KONSELOR" {{ old('role') == 'KONSELOR' ? 'selected' : '' }}>KONSELOR</option>
-                    </select>
-                    @error('role') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="pt-4">
