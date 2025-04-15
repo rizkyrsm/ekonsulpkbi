@@ -11,20 +11,27 @@
                 </div>
             @endif
 
-            <form action="{{ route('konselor.store') }}" method="POST" class="space-y-4">
+            @php
+                $isEdit = isset($detail);
+            @endphp
+
+            <form action="{{ $isEdit ? route('konselor.update', $detail->id) : route('konselor.store') }}" method="POST" class="space-y-4">
                 @csrf
+                @if($isEdit)
+                    @method('PUT')
+                @endif
 
                 <!-- Nama -->
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama</label>
-                    <input type="text" name="name" id="name" class="mt-1 block w-full rounded-md border-gray-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg" value="{{ old('name') }}">
+                    <input type="text" name="name" id="name" class="mt-1 block w-full rounded-md border-gray-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg" value="{{ old('name', $isEdit ? $detail->name : '') }}">
                     @error('name') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
 
                 <!-- Email -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-                    <input type="email" name="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg" value="{{ old('email') }}">
+                    <input type="email" name="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-lg" value="{{ old('email', $isEdit ? $detail->email : '') }}">
                     @error('email') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                 </div>
 
