@@ -13,25 +13,11 @@
 
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
-                    <flux:navlist.item :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate><i class="bi bi-house"></i> {{ __('Dashboard') }}</flux:navlist.item>
-                
-                @if(auth()->user()->role == 'ADMIN')
-                    <flux:navlist.item :href="route('cabang.index')" :current="request()->routeIs('DashCabang')" wire:navigate><i class="bi bi-building"></i> {{ __('Tambah Cabang') }}</flux:navlist.item>
-                    <flux:navlist.item :href="route('konselor.index')" :current="request()->routeIs('DashKonselor')" wire:navigate><i class="bi bi-person-badge"></i> {{ __('Daftar Konselor') }}</flux:navlist.item>
-                    <flux:navlist.item wire:navigate><i class="bi bi-people"></i> {{ __('Daftar Client') }}</flux:navlist.item>
-                @endif
-               
-                @if(auth()->user()->role == 'CABANG')
-                    <flux:navlist.item :href="route('konselor.index')" :current="request()->routeIs('DashKonselor')" wire:navigate><i class="bi bi-person-badge"></i> {{ __('Daftar Konselor') }}</flux:navlist.item>
-                @endif
-               
-                @if(auth()->user()->role == 'KONSELOR')
-                    <flux:navlist.item wire:navigate><i class="bi bi-people"></i> {{ __('Daftar Client') }}</flux:navlist.item>
-                @endif
-                
-                @if(auth()->user()->role == 'USER')
-                    <flux:navlist.item wire:navigate><i class="bi bi-chat-heart"></i> {{ __('History Konsultasi') }}</flux:navlist.item>
-                @endif
+                    {{-- @if(auth()->user()->role == 'ADMIN') --}}
+                    
+                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate> {{ __('Dashboard') }}</flux:navlist.item>
+                    <flux:navlist.item icon="user-group" :href="route('dashboard.users.create')" wire:navigate> {{ __('Manajemen User') }}</flux:navlist.item>
+                {{-- @endif --}}
                 
 
                 </flux:navlist.group>
