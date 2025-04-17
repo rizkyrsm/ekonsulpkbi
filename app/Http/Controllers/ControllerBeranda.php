@@ -14,5 +14,19 @@ class ControllerBeranda extends Controller
         return view('landing', compact('users')); // kirim data ke view
     }
 
-}
+    public function startChat($receiverId)
+    {
+        $conversation = Conversation::firstOrCreate(
+            [
+                'sender_id' => auth()->id(),
+                'receiver_id' => $receiverId,
+            ],
+            [
+                'sender_id' => auth()->id(),
+                'receiver_id' => $receiverId,
+            ]
+        );
 
+        return redirect()->route('chat.show', $conversation->id);
+    }
+}
