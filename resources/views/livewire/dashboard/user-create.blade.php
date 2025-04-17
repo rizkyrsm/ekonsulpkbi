@@ -1,4 +1,12 @@
 <div class="flex flex-col md:flex-row gap-6 p-6 dark:bg-gray-700 rounded-2xl shadow min-h-screen">
+    
+    @php
+        $isInactive = Auth::user()->status === 'NONACTIVE';
+    @endphp
+    @if($isInactive) {{ 'AKUN ANDA TIDAK AKTIV' }} @else
+
+    {{-- Kolom Status --}}
+
     {{-- Kolom Form --}}
     <div class="md:w-1/4 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow">
         <h2 class="text-2xl font-semibold mb-4 flex items-center gap-2">
@@ -60,6 +68,16 @@
         </form>
     </div>
 
+    @php
+        $userRole = Auth()->user()->role;
+    @endphp
+
+    @if ($userRole === 'USER')
+        <div class="text-center text-gray-600 text-lg mt-4">
+            Riwayat Konseling
+        </div>
+    @else
+
     {{-- Kolom List --}}
     <div class="md:w-3/4 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow">
         <h2 class="text-2xl font-semibold mb-4 flex items-center gap-2">
@@ -85,6 +103,7 @@
                     <th class="py-2 px-3">Email</th>
                     <th class="py-2 px-3">Role</th>
                     <th class="py-2 px-3">Aksi</th>
+                    <th class="py-2 px-3">Status</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
@@ -96,7 +115,11 @@
                         <td class="py-2 px-3 space-x-2">
                             <button wire:click="edit({{ $user->id }})" class="text-blue-600 hover:bg-sky-100 hover:underline"><x-heroicon-o-pencil-square class="w-5 h-5 text-blue-700" /></button>
                             <button wire:click="delete({{ $user->id }})" wire:confirm="Apakah Anda yakin ingin menghapus user ini?" class="text-red-600 hover:bg-red-100 hover:underline"><x-heroicon-o-trash class="w-5 h-5 text-red-700" /></button>
-
+                        </td>
+                        <td class="py-2 px-3 space-x-2">
+                            <button wire:click="toggleStatus({{ $user->id }})" class="text-sm px-2 py-1 rounded {{ $user->status === 'ACTIVE' ? 'bg-green-500 text-white' : 'bg-red-400 text-white' }}">
+                                {{ $user->status === 'ACTIVE' ? 'ACTIVE' : 'NONACTIVE' }}
+                            </button>
                         </td>
                     </tr>
                 @empty
@@ -110,4 +133,7 @@
             {{ $users->links() }}
         </div>
     </div>
+    @endif
+
+    @endif
 </div>

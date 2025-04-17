@@ -13,12 +13,12 @@
 
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
-                    {{-- @if(auth()->user()->role == 'ADMIN') --}}
-                    
+                    @if(auth()->user()->status == 'ACTIVE')
+
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate> {{ __('Dashboard') }}</flux:navlist.item>
                     <flux:navlist.item icon="user-group" :href="route('dashboard.users.create')" wire:navigate> {{ __('Manajemen User') }}</flux:navlist.item>
-                {{-- @endif --}}
-                
+                   
+                    @endif
 
                 </flux:navlist.group>
             </flux:navlist>
@@ -44,6 +44,7 @@
                 />
 
                 <flux:menu class="w-[220px]">
+                    @if(auth()->user()->status == 'ACTIVE')
                     <flux:menu.radio.group>
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
@@ -70,6 +71,8 @@
                     </flux:menu.radio.group>
 
                     <flux:menu.separator />
+                    
+                    @endif
 
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf

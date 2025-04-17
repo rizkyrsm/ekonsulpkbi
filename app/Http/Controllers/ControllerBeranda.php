@@ -10,7 +10,7 @@ class ControllerBeranda extends Controller
     public function listuser()
     {
         $users = User::all(); // ambil semua data user
-        $users = $users->where('role', '==', 'USER'); // filter user yang bukan admin
+        $users = $users->where('role', '==', 'KONSELOR'); // filter user yang bukan admin
         return view('landing', compact('users')); // kirim data ke view
     }
 

@@ -91,16 +91,37 @@ class UserCreate extends Component
 
     public function render()
     {
-        $users = User::query()
-            ->when($this->search, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('email', 'like', '%' . $this->search . '%');
-                });
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $userRole = Auth()->user()->role;
+        $query = User::query();
+
+        if ($userRole === 'CABANG') {
+            $query->where('role', 'KONSELOR');
+        } else if ($userRole === 'KONSELOR') {
+            $query->where('role', 'USER');
+        }
+
+        if ($userRole === 'USER') {
+            // Tidak menampilkan data pengguna lain
+            $users = collect(); // Koleksi kosong
+        } else {
+            $users = $query
+                ->when($this->search, function ($query) {
+                    $query->where(function ($q) {
+                        $q->where('name', 'like', '%' . $this->search . '%')
+                            ->orWhere('email', 'like', '%' . $this->search . '%');
+                    });
+                })
+                ->orderBy('created_at', 'desc')
+                ->paginate(5);
+        }
 
         return view('livewire.dashboard.user-create', compact('users'));
+    }
+
+    public function toggleStatus($userId)
+    {
+        $user = User::findOrFail($userId);
+        $user->status = $user->status === 'ACTIVE' ? 'NONACTIVE' : 'ACTIVE';
+        $user->save();
     }
 }
