@@ -27,7 +27,7 @@
 
         <form wire:submit.prevent="submit" class="space-y-4">
             <div>
-                <label class="block text-sm font-medium mb-1">Nama</label>
+                <label class="block text-sm font-medium mb-1">Username</label>
                 <input wire:model="name" type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2" />
                 @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
@@ -99,7 +99,7 @@
         <table class="min-w-full text-sm text-left">
             <thead class="bg-gray-100 text-gray-700 font-semibold">
                 <tr>
-                    <th class="py-2 px-3">Nama</th>
+                    <th class="py-2 px-3">Username</th>
                     <th class="py-2 px-3">Email</th>
                     <th class="py-2 px-3">Role</th>
                     <th class="py-2 px-3">Aksi</th>

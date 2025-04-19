@@ -6,8 +6,6 @@ use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Facades\Hash;
 use Livewire\WithPagination;
-use Wirechat\Models\Thread;
-use Illuminate\Support\Facades\Auth;
 
 class UserCreate extends Component
 {
@@ -104,7 +102,7 @@ class UserCreate extends Component
             // Tidak menampilkan data pengguna lain
             $users = collect(); // Koleksi kosong
         } else {
-            $users = $query
+            $users = $query->where('id', '!=', Auth()->user()->id)
                 ->when($this->search, function ($query) {
                     $query->where(function ($q) {
                         $q->where('name', 'like', '%' . $this->search . '%')
@@ -123,13 +121,6 @@ class UserCreate extends Component
         $user = User::findOrFail($userId);
         $user->status = $user->status === 'ACTIVE' ? 'NONACTIVE' : 'ACTIVE';
         $user->save();
-    }
-
-    public function startChat($receiverId)
-    {
-        $otherUser = User::findOrFail($receiverId);
-        $auth = auth()->user();
-        $conversation = $auth->createConversationWith($otherUser, 'Optional message');
     }
 
 }

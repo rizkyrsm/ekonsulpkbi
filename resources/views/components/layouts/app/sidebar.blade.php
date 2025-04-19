@@ -16,8 +16,28 @@
                     @if(auth()->user()->status == 'ACTIVE')
 
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate> {{ __('Dashboard') }}</flux:navlist.item>
-                    <flux:navlist.item icon="user-group" :href="route('dashboard.users.create')" wire:navigate> {{ __('Manajemen User') }}</flux:navlist.item>
-                   
+                @php
+                    $role = auth()->user()->role ?? 'USER';
+                @endphp
+                
+                @switch($role)
+                    @case('ADMIN')
+                        <flux:navlist.item icon="user-group" :href="route('dashboard.users.create')" wire:navigate> {{ __('Manajemen User') }}</flux:navlist.item>
+                        @break
+                
+                    @case('KONSELOR')
+                        
+
+                        @break
+                
+                    @case('USER')
+                        
+
+                        @break
+                
+                    @default
+                @endswitch
+
                     @endif
 
                 </flux:navlist.group>
@@ -55,11 +75,12 @@
                                         {{ auth()->user()->initials() }}
                                     </span>
                                 </span>
-
+                                <a href="{{ route('settings.profile-detail') }}">
                                 <div class="grid flex-1 text-start text-sm leading-tight">
                                     <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
                                     <span class="truncate text-xs">{{ auth()->user()->role }}</span>
                                 </div>
+                                </a>
                             </div>
                         </div>
                     </flux:menu.radio.group>
@@ -101,17 +122,17 @@
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <span
-                                        class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white"
-                                    >
-                                        {{ auth()->user()->initials() }}
+                                    <span class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                    {{ auth()->user()->initials() }}
                                     </span>
                                 </span>
 
+                                <a href="{{ route('settings.profile-detail') }}">
                                 <div class="grid flex-1 text-start text-sm leading-tight">
                                     <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
                                     <span class="truncate text-xs">{{ auth()->user()->role }}</span>
                                 </div>
+                                </a>
                             </div>
                         </div>
                     </flux:menu.radio.group>
