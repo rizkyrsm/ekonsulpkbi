@@ -37,16 +37,22 @@ class KonselorController extends Controller
         return redirect()->back()->with('success', 'User berhasil dibuat.');
     }
 
-    public function create() { /* show form to create product */ }
-    public function show($id) { /* show one product */ }
+    public function create()
+    { /* show form to create product */
+    }
+    public function show($id)
+    { /* show one product */
+    }
 
-    public function edit($id) { 
+    public function edit($id)
+    {
         $users = User::all()->where('role', '==', 'KONSELOR');
         $detail = User::findOrFail($id); // ambil data user berdasarkan id
         return view('DashKonselor', compact('users', 'detail')); // kirim data ke view
     }
 
-    public function update(Request $request, $id) { 
+    public function update(Request $request, $id)
+    {
         // Validasi input
         $requestParameter = [
             'name' => 'required|string|max:255',
@@ -70,7 +76,7 @@ class KonselorController extends Controller
 
         return redirect('/konselor')->with('success', 'User berhasil diperbarui.');
     }
-    public function destroy($id) { /* delete product */ }
-
+    public function destroy($id)
+    { /* delete product */
+    }
 }
-
