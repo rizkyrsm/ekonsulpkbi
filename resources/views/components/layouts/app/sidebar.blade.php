@@ -13,12 +13,23 @@
 
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
-                    @if(auth()->user()->status == 'ACTIVE')
+                    <flux:navlist.item :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate><i class="bi bi-house"></i> {{ __('Dashboard') }}</flux:navlist.item>
 
-                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate> {{ __('Dashboard') }}</flux:navlist.item>
-                    <flux:navlist.item icon="user-group" :href="route('dashboard.users.create')" wire:navigate> {{ __('Manajemen User') }}</flux:navlist.item>
-                   
-                    @endif
+                    @canRole('ADMIN', 'CABANG')
+                    <flux:navlist.item :href="route('cabang.index')" :current="request()->routeIs('DashCabang')" wire:navigate><i class="bi bi-building"></i> {{ __('Tambah Cabang') }}</flux:navlist.item>
+                    @endcanRole
+
+                    @canRole('ADMIN', 'CABANG')
+                    <flux:navlist.item :href="route('konselor.index')" :current="request()->routeIs('DashKonselor')" wire:navigate><i class="bi bi-person-badge"></i> {{ __('Daftar Konselor') }}</flux:navlist.item>
+                    @endcanRole
+
+                    @canRole('ADMIN', 'CABANG')
+                    <flux:navlist.item wire:navigate><i class="bi bi-people"></i> {{ __('Daftar Client') }}</flux:navlist.item>
+                    @endcanRole
+
+                    @canRole('ADMIN', 'CABANG')
+                    <flux:navlist.item wire:navigate><i class="bi bi-chat-heart"></i> {{ __('History Konsultasi') }}</flux:navlist.item>
+                    @endcanRole                
 
                 </flux:navlist.group>
             </flux:navlist>
@@ -44,7 +55,6 @@
                 />
 
                 <flux:menu class="w-[220px]">
-                    @if(auth()->user()->status == 'ACTIVE')
                     <flux:menu.radio.group>
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
@@ -71,8 +81,6 @@
                     </flux:menu.radio.group>
 
                     <flux:menu.separator />
-                    
-                    @endif
 
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf
