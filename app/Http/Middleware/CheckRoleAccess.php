@@ -18,12 +18,7 @@ class CheckRoleAccess
         $user = auth()->user();
 
         if (! $user || ! in_array($user->role, $roles)) {
-            session()->flash('toasts', [
-                ...session('toasts', []),
-                ['type' => 'warning', 'message' => 'Kamu tidak punya akses ke menu ini!'],
-            ]);
-
-            return redirect()->route('dashboard');
+            abort(404);
         }
 
         return $next($request);

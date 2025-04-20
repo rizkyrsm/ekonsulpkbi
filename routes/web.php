@@ -9,7 +9,7 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::middleware(['web', 'auth'])->group(function () {    
+Route::middleware(['auth'])->group(function () {    
     Route::get('/', function () {
         return redirect()->route('dashboard');
     })->name('home');
@@ -21,7 +21,11 @@ Route::middleware(['web', 'auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 
     Route::resource('cabang', CabangController::class)->middleware('role:ADMIN,CABANG');
-    Route::resource('konselor', KonselorController::class)->middleware('role:ADMIN,CABANG');
+    Route::resource('konselor', KonselorController::class)->middleware('role:CABANG');
+});
+
+Route::fallback(function () {
+    abort(404);
 });
 
 require __DIR__ . '/auth.php';
