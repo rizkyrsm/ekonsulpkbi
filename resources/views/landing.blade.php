@@ -31,7 +31,7 @@
       </nav>
 
       <div class="container-md mt-4">
-        <h2 class="mb-4">Daftar User</h2>
+        <h2 class="mb-4">Daftar Konselor</h2>
     
         <div class="d-flex flex-wrap gap-3">
             @foreach($users as $index => $user)

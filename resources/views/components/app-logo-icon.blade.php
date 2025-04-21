@@ -9,6 +9,7 @@
 
 {{-- <img src="https://pkbi-jatim.or.id/wp-content/uploads/2023/02/logo-pkbi_JATIM-Baru.png" alt="Logo" class="h-auto w-auto object-contain" /> --}}
 
-<div class="flex aspect-square h-11 items-center justify-center rounded-md bg-accent-content text-accent-foreground">
-    <img src="https://pkbi-jatim.or.id/wp-content/uploads/2023/02/logo-pkbi_JATIM-Baru.png" alt="Logo" class="h-11 w-auto object-contain" />
-</div>
+<a href="{{ route('home') }}" class="flex aspect-square h-11 items-center justify-center rounded-md bg-accent-content text-accent-foreground">
+    <img src="https://pkbi-jatim.or.id/wp-content/uploads/2023/02/logo-pkbi_JATIM-Baru.png" alt="Logo" class="h-11 p-1 w-auto object-contain" />
+</a>
+
