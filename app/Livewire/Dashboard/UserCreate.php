@@ -77,6 +77,7 @@ class UserCreate extends Component
     {
         User::find($id)->delete();
         session()->flash('success', 'User berhasil dihapus.');
+        $this->resetForm();
     }
 
     public function rules()

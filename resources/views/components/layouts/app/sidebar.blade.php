@@ -24,6 +24,7 @@
                     @case('ADMIN')
                         <flux:navlist.item icon="user-group" :href="route('dashboard.users.create')" wire:navigate> {{ __('Manajemen User') }}</flux:navlist.item>
                         <flux:navlist.item icon="shield-check" :href="route('dashboard.layanan.create')" wire:navigate> {{ __('Manajemen Layanan') }}</flux:navlist.item>
+                        <flux:navlist.item icon="receipt-percent" :href="route('dashboard.diskon.create')" wire:navigate> {{ __('Manajemen Diskon') }}</flux:navlist.item>
                         @break
                 
                     @case('KONSELOR')

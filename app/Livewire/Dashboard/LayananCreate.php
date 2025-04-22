@@ -93,5 +93,6 @@ class LayananCreate extends Component
     {
         Layanan::find($id)->delete();
         session()->flash('message', 'Layanan berhasil dihapus.');
+        $this->resetForm();
     }
 }
