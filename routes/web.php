@@ -5,7 +5,7 @@ use Livewire\Volt\Volt;
 use App\Http\Controllers\ControllerBeranda;
 use App\Livewire\Dashboard\UserCreate;
 use App\Livewire\Dashboard\ProfileDetail;
-
+use App\Livewire\Dashboard\LayananCreate;
 
 
 Route::get('/', [ControllerBeranda::class, 'listuser'])->name('home');
@@ -21,6 +21,7 @@ Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
     Route::get('/dashboard/users/create', UserCreate::class)->name('dashboard.users.create');
+    Route::get('/dashboard/layanan/create', LayananCreate::class)->name('dashboard.layanan.create');
     Volt::route('settings/profile-detail', ProfileDetail::class)->name('settings.profile-detail');
 
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');

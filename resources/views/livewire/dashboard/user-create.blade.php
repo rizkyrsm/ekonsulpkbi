@@ -96,7 +96,7 @@
         </div>
 
         {{-- Table --}}
-        <table class="min-w-full text-sm text-left">
+        <table class="min-w-full text-sm text-left border">
             <thead class="bg-gray-100 text-gray-700 font-semibold">
                 <tr>
                     <th class="py-2 px-3">Username</th>
