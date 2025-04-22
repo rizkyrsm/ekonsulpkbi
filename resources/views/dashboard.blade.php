@@ -5,7 +5,7 @@
             <!-- Card Konselor (Biru) -->
             <div class="flex items-center gap-4 rounded-xl border border-blue-700 bg-blue-500 p-4 shadow-sm">
                 <div class="flex h-12 w-12 items-center justify-center rounded-full bg-blue-800 text-white">
-                    @svg('heroicon-o-user-group', 'w-6 h-6')
+                    @svg('heroicon-o-user-group', 'w-12 h-12')
                 </div>
                 <div>
                     <div class="text-sm font-medium text-white">JUMLAH KONSELOR</div>
@@ -16,7 +16,7 @@
             <!-- Card User (Kuning) -->
             <div class="flex items-center gap-4 rounded-xl border border-yellow-500 bg-yellow-500 p-4 shadow-sm">
                 <div class="flex h-12 w-12 items-center justify-center rounded-full bg-yellow-700 text-white">
-                    @svg('heroicon-o-user', 'w-6 h-6')
+                    @svg('heroicon-o-user', 'w-12 h-12')
                 </div>
                 <div>
                     <div class="text-sm font-medium text-white">JUMLAH USER</div>
@@ -27,7 +27,7 @@
             <!-- Card Diskon Aktif (Hijau) -->
             <div class="flex items-center gap-4 rounded-xl border border-green-500 bg-green-500 p-4 shadow-sm">
                 <div class="flex h-12 w-12 items-center justify-center rounded-full bg-green-700 text-white">
-                    @svg('heroicon-o-tag', 'w-6 h-6')
+                    @svg('heroicon-o-tag', 'w-12 h-12')
                 </div>
                 <div>
                     <div class="text-sm font-medium text-white">DISKON AKTIF</div>
