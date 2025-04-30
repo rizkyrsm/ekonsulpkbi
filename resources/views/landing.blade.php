@@ -31,17 +31,17 @@
       </nav>
 
       <div class="container-md mt-4">
-        <h2 class="mb-4">Daftar Konselor</h2>
+        <h2 class="mb-4">Daftar Layanan</h2>
     
         <div class="d-flex flex-wrap gap-3">
-            @foreach($users as $index => $user)
+            @foreach($layanans as $index => $layanan)
                 <div class="card" style="width: 18rem;">
                     <div class="card-body">
-                        <h5 class="card-title">{{ $user->name }}</h5>
-                        <h6 class="card-subtitle mb-2 text-body-secondary">{{ $user->email }}</h6>
+                        <h5 class="card-title">{{ $layanan->nama_layanan }}</h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">VOUCHER : PKBIJATIM</h6>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <br><s>Rp. {{ $layanan->harga_layanan }}</s>/Rp.0
                         <a href="{{ route('login') }}" class="btn btn-success text-white card-link"><i class="bi bi-chat-heart-fill"></i> Mulai Konseling</a>
-                        {{-- <button class="btn btn-info btn-sm text-white">{{ $user->role }}</button> --}}
                     </div>
                 </div>
             @endforeach

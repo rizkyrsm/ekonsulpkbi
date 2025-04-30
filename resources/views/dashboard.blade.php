@@ -37,8 +37,17 @@
         </div>
 
         <!-- Placeholder Bawah -->
-        <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-300">
-            <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/10 dark:stroke-gray-900/10" />
-        </div>
+        {{-- <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-300"> --}}
+            {{-- <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/10 dark:stroke-gray-900/10" /> --}}
+            <div class="grid grid-cols-3 gap-4">
+                @foreach($layanans as $index => $layanan)
+                    <div class="rounded bg-green-500">
+                            <p class="font-bold">{{ $layanan->nama_layanan }}</p>
+                            <s class="">Rp. {{ $layanan->harga_layanan }}</s>/Rp.0
+                    </div>
+                @endforeach
+            </div>
+                
+        {{-- </div> --}}
     </div>
 </x-layouts.app>

@@ -9,7 +9,7 @@ use App\Livewire\Dashboard\ProfileDetail;
 use App\Livewire\Dashboard\LayananCreate;
 use App\Livewire\Dashboard\DiskonCreate;
 
-Route::get('/', [ControllerBeranda::class, 'listuser'])->name('home');
+Route::get('/', [ControllerBeranda::class, 'listlayanan'])->name('home');
 
 // ✅ FIXED: pastikan hanya 1 route untuk dashboard
 Route::get('/dashboard', [DashController::class, 'index'])
