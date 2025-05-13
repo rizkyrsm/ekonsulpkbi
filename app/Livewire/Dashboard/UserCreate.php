@@ -3,6 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\User;
+use App\Models\DetailUser;
 use Livewire\Component;
 use Illuminate\Support\Facades\Hash;
 use Livewire\WithPagination;
@@ -42,17 +43,44 @@ class UserCreate extends Component
             ]);
             session()->flash('success', 'User berhasil diperbarui.');
         } else {
-            User::create([
+            $user = User::create([
                 'name' => $this->name,
                 'email' => $this->email,
                 'password' => Hash::make($this->password),
                 'role' => $this->role,
             ]);
+
+            // Mengambil ID user yang sedang login sebagai ID cabang
+            $id_cabang = auth()->user()->id;
+            $userRole = auth()->user()->role;
+
+            // Log ID cabang dan role
+            \Log::info('ID Cabang: ' . $id_cabang);
+            \Log::info('User Role: ' . $userRole);
+
+            if ($userRole === 'CABANG') {
+                // Buat atau perbarui data DetailUser dengan ID cabang dari user login
+                DetailUser::updateOrCreate(
+                    ['id_user' => $user->id], // Kriteria pencarian
+                    [   // Data yang akan disimpan/diperbarui
+                        'id_cabang' => $id_cabang,
+                        'nama' => '',
+                        'nik' => '',
+                        'tgl_lahir' => now(),
+                        'alamat' => '',
+                        'no_tlp' => '',
+                        'status_online' => 'online',
+                        'jenis_kelamin' => 'LAINYA',
+                    ]
+                );
+            }
+
             session()->flash('success', 'User berhasil ditambahkan.');
         }
 
         $this->resetForm();
     }
+
 
     public function resetForm()
     {
@@ -91,31 +119,47 @@ class UserCreate extends Component
     }
 
     public function render()
-    {
-        $userRole = Auth()->user()->role;
-        $query = User::query();
+{
+    $userRole = Auth()->user()->role;
+    $query = User::query();
 
-        if ($userRole === 'CABANG') {
-            $query->where('role', 'KONSELOR');
-        } else if ($userRole === 'KONSELOR') {
-            $query->where('role', 'USER');
-        } else if ($userRole === 'USER') {
-            // Tidak menampilkan data pengguna lain
-            $users = collect(); // Koleksi kosong
-        } else {
-            $users = $query->where('id', '!=', Auth()->user()->id)
-                ->when($this->search, function ($query) {
-                    $query->where(function ($q) {
-                        $q->where('name', 'like', '%' . $this->search . '%')
-                            ->orWhere('email', 'like', '%' . $this->search . '%');
-                    });
-                })
-                ->orderBy('created_at', 'desc')
-                ->paginate(5);
-        }
+    // Jika role CABANG, tampilkan konselor dengan id_cabang yang sama
+    if ($userRole === 'CABANG') {
+        $idCabang = Auth()->user()->id;
 
-        return view('livewire.dashboard.user-create', compact('users'));
+        $query->join('detail_users', 'users.id', '=', 'detail_users.id_user')
+            ->where('users.role', 'KONSELOR')
+            ->where('detail_users.id_cabang', $idCabang);
     }
+    // Jika role KONSELOR, tampilkan pengguna biasa
+    else if ($userRole === 'KONSELOR') {
+        $query->where('role', 'USER');
+    }
+    // Jika role USER, tidak menampilkan pengguna lain
+    else if ($userRole === 'USER') {
+        $users = collect(); // Koleksi kosong
+    }
+    // Jika bukan CABANG, KONSELOR, atau USER, tampilkan semua selain pengguna saat ini
+    else {
+        $query->where('id', '!=', Auth()->user()->id);
+    }
+
+    // Pencarian dan pengurutan
+    $users = $query
+        ->when($this->search, function ($query) {
+            $query->where(function ($q) {
+                $q->where('users.name', 'like', '%' . $this->search . '%')
+                    ->orWhere('users.email', 'like', '%' . $this->search . '%');
+            });
+        })
+        ->orderBy('users.created_at', 'desc')
+        ->select('users.*') // Pilih semua kolom dari tabel users
+        ->paginate(5);
+
+    return view('livewire.dashboard.user-create', compact('users'));
+}
+
+
 
     public function toggleStatus($userId)
     {
@@ -123,5 +167,4 @@ class UserCreate extends Component
         $user->status = $user->status === 'ACTIVE' ? 'NONACTIVE' : 'ACTIVE';
         $user->save();
     }
-
 }

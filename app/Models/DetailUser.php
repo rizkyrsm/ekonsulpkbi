@@ -14,6 +14,7 @@ class DetailUser extends Model
     
     protected $fillable = [
         'id_user',
+        'id_cabang',
         'nama',
         'nik',
         'tgl_lahir',

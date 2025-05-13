@@ -46,12 +46,20 @@
 
             <div>
                 <label class="block text-sm font-medium mb-1">Role</label>
+                @canRole('ADMIN')
                 <select wire:model="role" class="w-full border border-gray-300 rounded-lg px-3 py-2">
                     <option class="dark: bg-gray-600" value="">Pilih Role</option>
                     <option class="dark: bg-gray-600" value="ADMIN">ADMIN</option>
                     <option class="dark: bg-gray-600" value="CABANG">CABANG</option>
+                    {{-- <option class="dark: bg-gray-600" value="KONSELOR">KONSELOR</option> --}}
+                </select>
+                @endcanRole
+                @canRole('CABANG')
+                <select wire:model="role" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                    <option class="dark: bg-gray-600" value="">Pilih Role</option>
                     <option class="dark: bg-gray-600" value="KONSELOR">KONSELOR</option>
                 </select>
+                @endcanRole
                 @error('role') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 

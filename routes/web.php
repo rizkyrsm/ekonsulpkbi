@@ -24,7 +24,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard/users/create', UserCreate::class)
     ->name('dashboard.users.create')
-    ->middleware('role:ADMIN'); // <- pastikan ini adalah controller biasa
+    ->middleware('role:ADMIN,CABANG'); // <- pastikan ini adalah controller biasa
 
     Route::get('/dashboard/layanan/create', LayananCreate::class)
     ->name('dashboard.layanan.create')

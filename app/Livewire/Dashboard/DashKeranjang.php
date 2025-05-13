@@ -23,13 +23,6 @@ class DashKeranjang extends Component
         // Mengambil data layanan
         $this->layanans = $id ? Layanan::where('id_layanan', $id)->get() : Layanan::all();
         $this->resetHarga();
-
-        // Mengambil data semua user dengan role "konselor" dan status "active"
-        $this->konselors = User::select('users.*', 'detail_users.*')
-            ->join('detail_users', 'users.id', '=', 'detail_users.id_user')
-            ->where('users.role', 'KONSELOR')
-            ->where('users.status', 'ACTIVE')
-            ->get();
     }
 
     public function resetHarga()
@@ -41,6 +34,7 @@ class DashKeranjang extends Component
 
     public function applyVoucher()
     {
+            
         $diskon = Diskon::where('kode_voucher', $this->voucher)
                ->where('status_aktiv', 'AKTIF')
                ->first();
@@ -73,9 +67,18 @@ class DashKeranjang extends Component
     }
 
     public function render()
-    {
-        return view('keranjang', [
-            'konselors' => $this->konselors,
-        ]);
-    }
+{
+    // Mengambil data semua user dengan role "KONSELOR" dan status "ACTIVE"
+    $this->konselors = User::select('users.*', 'detail_users.*', 'cabang.name as cabang_name')
+        ->join('detail_users', 'users.id', '=', 'detail_users.id_user')
+        ->leftJoin('users as cabang', 'detail_users.id_cabang', '=', 'cabang.id') // Join ke tabel users untuk cabang
+        ->where('users.role', 'KONSELOR')
+        ->where('users.status', 'ACTIVE')
+        ->get();
+
+    return view('keranjang', [
+        'konselors' => $this->konselors,
+    ]);
+}
+
 }
