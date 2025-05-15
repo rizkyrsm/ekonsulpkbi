@@ -45,7 +45,7 @@
                     <h3 class="text-lg font-semibold text-gray-800">{{ $layanan->nama_layanan }}</h3>
                     <p class="text-gray-600 line-through">Rp. {{ number_format($layanan->harga_layanan, 0, ',', '.') }} </p>
                     <p class="text-green-600 font-bold">Potongan Diskon 100%</p>
-                    <p class="text-green-600 font-bold">Gunakan Kode Voucher : PKBIJATIM</p>
+                    <p class="text-green-600 font-bold">Gunakan Kode Voucher: PKBIJAYA</p>
                     <a href="{{ route('dashboard.keranjang', ['id' => $layanan->id_layanan]) }}" class="mt-2 w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center justify-center gap-2">
                         Mulai Konseling
                         <flux:icon.chat-bubble-oval-left variant="solid" />

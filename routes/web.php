@@ -9,6 +9,7 @@ use App\Livewire\Dashboard\ProfileDetail;
 use App\Livewire\Dashboard\LayananCreate;
 use App\Livewire\Dashboard\DiskonCreate;
 use App\Livewire\Dashboard\DashKeranjang;
+use App\Livewire\Dashboard\DashOrder;
 
 Route::get('/home', [ControllerBeranda::class, 'listlayanan'])->name('home');
 
@@ -36,6 +37,10 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/keranjang/{id?}', DashKeranjang::class)
     ->name('dashboard.keranjang')
+    ->middleware('role:USER'); // <- pastikan ini adalah controller biasa
+    
+    Route::get('/orders', DashOrder::class)
+    ->name('orders')
     ->middleware('role:USER'); // <- pastikan ini adalah controller biasa
 
     Route::redirect('settings', 'settings/profile');

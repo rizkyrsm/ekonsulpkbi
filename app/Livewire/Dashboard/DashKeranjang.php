@@ -6,9 +6,12 @@ use Livewire\Component;
 use App\Models\Layanan;
 use App\Models\Diskon;
 use App\Models\User;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 
 class DashKeranjang extends Component
 {
+    public $total, $payment_status;
     public $layanans;
     public $voucher;
     public $potongan = 0;
@@ -17,6 +20,7 @@ class DashKeranjang extends Component
     public $vouchernofalid;
     public $jenispotongan;
     public $konselors;
+    public $konselor; // Properti yang ditambahkan
 
     public function mount($id = null)
     {
@@ -34,10 +38,9 @@ class DashKeranjang extends Component
 
     public function applyVoucher()
     {
-            
         $diskon = Diskon::where('kode_voucher', $this->voucher)
-               ->where('status_aktiv', 'AKTIF')
-               ->first();
+            ->where('status_aktiv', 'AKTIF')
+            ->first();
 
         if ($diskon) {
             foreach ($this->layanans as $layanan) {
@@ -64,21 +67,48 @@ class DashKeranjang extends Component
             $this->vouchernofalid = 'tidak valid!';
             $this->jenispotongan = '';
         }
+
+        $this->total = array_sum($this->hargaSetelahDiskon);
+    }
+
+    public function saveOrder()
+    {
+        $this->validate([
+            'konselor' => 'required',
+            'voucher' => 'nullable|string',
+            'total' => 'required|numeric',
+        ]);
+
+        try {
+            Order::create([
+                'id_user' => Auth::id(),
+                'id_konselor' => $this->konselor,
+                'nama_layanan' => implode(', ', array_column($this->layanans->toArray(), 'nama_layanan')),
+                'voucher' => $this->voucher,
+                'total' => $this->total,
+                'payment_status' => 'BELUM BAYAR',
+            ]);
+
+            session()->flash('message', 'Pesanan berhasil disimpan, Silahkan lakukan konfirmasi pembayaran jika sudah melakukan pembayaran.');
+            return redirect()->route('orders');
+        } catch (\Exception $e) {
+            session()->flash('message', 'Gagal menyimpan pesanan: ' . $e->getMessage());
+        }
     }
 
     public function render()
-{
-    // Mengambil data semua user dengan role "KONSELOR" dan status "ACTIVE"
-    $this->konselors = User::select('users.*', 'detail_users.*', 'cabang.name as cabang_name')
-        ->join('detail_users', 'users.id', '=', 'detail_users.id_user')
-        ->leftJoin('users as cabang', 'detail_users.id_cabang', '=', 'cabang.id') // Join ke tabel users untuk cabang
-        ->where('users.role', 'KONSELOR')
-        ->where('users.status', 'ACTIVE')
-        ->get();
+    {
+        $this->konselors = User::select('users.*', 'detail_users.*', 'cabang.name as cabang_name')
+            ->join('detail_users', 'users.id', '=', 'detail_users.id_user')
+            ->leftJoin('users as cabang', 'detail_users.id_cabang', '=', 'cabang.id')
+            ->where('users.role', 'KONSELOR')
+            ->where('users.status', 'ACTIVE')
+            ->where('detail_users.status_online', 'online')
+            ->get();
 
-    return view('keranjang', [
-        'konselors' => $this->konselors,
-    ]);
-}
-
+        return view('keranjang', [
+            'konselors' => $this->konselors,
+        ]);
+    }
+    
 }

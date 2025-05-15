@@ -55,8 +55,8 @@ class UserCreate extends Component
             $userRole = auth()->user()->role;
 
             // Log ID cabang dan role
-            \Log::info('ID Cabang: ' . $id_cabang);
-            \Log::info('User Role: ' . $userRole);
+            // \Log::info('ID Cabang: ' . $id_cabang);
+            // \Log::info('User Role: ' . $userRole);
 
             if ($userRole === 'CABANG') {
                 // Buat atau perbarui data DetailUser dengan ID cabang dari user login
@@ -64,7 +64,7 @@ class UserCreate extends Component
                     ['id_user' => $user->id], // Kriteria pencarian
                     [   // Data yang akan disimpan/diperbarui
                         'id_cabang' => $id_cabang,
-                        'nama' => '',
+                        'nama' => $user->name,
                         'nik' => '',
                         'tgl_lahir' => now(),
                         'alamat' => '',
@@ -119,46 +119,53 @@ class UserCreate extends Component
     }
 
     public function render()
-{
-    $userRole = Auth()->user()->role;
-    $query = User::query();
+    {
+        $userRole = Auth()->user()->role;
+        $query = User::query();
 
-    // Jika role CABANG, tampilkan konselor dengan id_cabang yang sama
-    if ($userRole === 'CABANG') {
-        $idCabang = Auth()->user()->id;
+        // Jika role CABANG, tampilkan konselor dengan id_cabang yang sama
+        if ($userRole === 'CABANG') {
+            $idCabang = Auth()->user()->id;
 
-        $query->join('detail_users', 'users.id', '=', 'detail_users.id_user')
-            ->where('users.role', 'KONSELOR')
-            ->where('detail_users.id_cabang', $idCabang);
+            $query->join('detail_users', 'users.id', '=', 'detail_users.id_user')
+            ->leftJoin('users as cabang_user', 'detail_users.id_cabang', '=', 'cabang_user.id') // Left join dengan cabang_user
+            ->where('users.role', 'KONSELOR') // Hanya menampilkan konselor
+            ->where('detail_users.id_cabang', $idCabang); // Filter berdasarkan id_cabang milik user yang login
+        }
+        // Jika role KONSELOR, tampilkan pengguna biasa
+        else if ($userRole === 'KONSELOR') {
+            $query->where('role', 'USER');
+        }
+        // Jika role USER, tidak menampilkan pengguna lain
+        else if ($userRole === 'USER') {
+            $users = collect(); // Koleksi kosong
+            return view('livewire.dashboard.user-create', compact('users'));
+        }
+        // Jika role ADMIN, tampilkan semua pengguna kecuali diri sendiri
+        else if ($userRole === 'ADMIN') {
+            $query->leftJoin('detail_users', 'users.id', '=', 'detail_users.id_user')
+                ->leftJoin('users as cabang_user', 'detail_users.id_cabang', '=', 'cabang_user.id')
+                ->where('users.id', '!=', Auth()->user()->id); // Hindari menampilkan user sendiri
+        }
+
+        // Pencarian dan pengurutan
+        $users = $query
+            ->when($this->search, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('users.name', 'like', '%' . $this->search . '%')
+                        ->orWhere('users.email', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->orderBy('users.created_at', 'desc')
+            ->select(
+                'users.*',
+                'cabang_user.name as cabang_name', // Nama cabang jika ada
+                'detail_users.id_cabang' // ID cabang jika ada
+            )
+            ->paginate(5);
+
+        return view('livewire.dashboard.user-create', compact('users'));
     }
-    // Jika role KONSELOR, tampilkan pengguna biasa
-    else if ($userRole === 'KONSELOR') {
-        $query->where('role', 'USER');
-    }
-    // Jika role USER, tidak menampilkan pengguna lain
-    else if ($userRole === 'USER') {
-        $users = collect(); // Koleksi kosong
-    }
-    // Jika bukan CABANG, KONSELOR, atau USER, tampilkan semua selain pengguna saat ini
-    else {
-        $query->where('id', '!=', Auth()->user()->id);
-    }
-
-    // Pencarian dan pengurutan
-    $users = $query
-        ->when($this->search, function ($query) {
-            $query->where(function ($q) {
-                $q->where('users.name', 'like', '%' . $this->search . '%')
-                    ->orWhere('users.email', 'like', '%' . $this->search . '%');
-            });
-        })
-        ->orderBy('users.created_at', 'desc')
-        ->select('users.*') // Pilih semua kolom dari tabel users
-        ->paginate(5);
-
-    return view('livewire.dashboard.user-create', compact('users'));
-}
-
 
 
     public function toggleStatus($userId)

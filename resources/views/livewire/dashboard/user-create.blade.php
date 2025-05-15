@@ -108,6 +108,7 @@
             <thead class="bg-gray-100 text-gray-700 font-semibold">
                 <tr>
                     <th class="py-2 px-3">Username</th>
+                    <th class="py-2 px-3">Cabang</th>
                     <th class="py-2 px-3">Email</th>
                     <th class="py-2 px-3">Role</th>
                     <th class="py-2 px-3">Aksi</th>
@@ -117,7 +118,8 @@
             <tbody class="divide-y divide-gray-200">
                 @forelse ($users as $user)
                     <tr>
-                        <td class="py-2 px-3">{{ $user->name }}</td>
+                        <td class="py-2 px-3">{{ $user->name }} </td>
+                        <td class="py-2 px-3">{{ $user->cabang_name ?? '' }} </td>
                         <td class="py-2 px-3">{{ $user->email }}</td>
                         <td class="py-2 px-3 capitalize">{{ $user->role }}</td>
                         <td class="py-2 px-3 space-x-2">
