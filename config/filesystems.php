@@ -77,14 +77,5 @@ return [
         public_path('storage') => storage_path('app/public'),
     ],
 
-    // 'temporary_file_upload' => [
-    //     'disk' => 'public',
-    //     'rules' => 'file|mimes:jpg,jpeg,png|max:2048',
-    //     'directory' => null,
-    //     'middleware' => null,
-    //     'preview_mimes' => ['png', 'jpg', 'jpeg'],
-    //     'max_upload_time' => 5, // menit
-    // ],
-
 
 ];
