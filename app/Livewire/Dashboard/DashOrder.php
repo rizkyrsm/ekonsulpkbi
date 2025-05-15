@@ -6,10 +6,10 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use Livewire\WithFileUploads;
 
 class DashOrder extends Component
 {
-    use WithPagination;
 
     public $search = '';
     public $perPage = 5;
@@ -23,13 +23,7 @@ class DashOrder extends Component
 
     public function render()
     {
-        // Ambil data order berdasarkan user yang sedang login dan pencarian
         $orders = Order::where('id_user', Auth::id())
-            ->where(function ($query) {
-                $query->where('nama_layanan', 'like', '%' . $this->search . '%')
-                      ->orWhere('voucher', 'like', '%' . $this->search . '%')
-                      ->orWhere('payment_status', 'like', '%' . $this->search . '%');
-            })
             ->orderBy('created_at', 'desc')
             ->paginate($this->perPage);
 

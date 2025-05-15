@@ -6,6 +6,14 @@
             Tidak ada pesanan ditemukan.
         </div>
     @else
+
+    @if (session()->has('success'))
+        <div class="bg-green-100 text-green-800 p-3 rounded mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
+
+
      <!-- Pagination -->
             <div class="mt-4">
                 {{ $orders->links() }}
@@ -19,6 +27,7 @@
                         <th class="py-3 px-6 text-left">Voucher</th>
                         <th class="py-3 px-6 text-left">Total Payment</th>
                         <th class="py-3 px-6 text-left">Status</th>
+                        <th class="py-3 px-6 text-left">Upload</th>
                         <th class="py-3 px-6 text-left">Tanggal</th>
                     </tr>
                 </thead>
@@ -35,6 +44,14 @@
                                     {{ $order->payment_status }}
                                 </span>
                             </td>
+                            <td class="py-3 px-6">
+                                @if($order->bukti_transfer)
+                                        Lihat Bukti
+                                @else
+                                        Upload
+                                @endif
+                            </td>
+
                             <td class="py-3 px-6">{{ $order->created_at->format('d M Y H:i') }}</td>
                         </tr>
                     @endforeach

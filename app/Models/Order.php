@@ -10,11 +10,7 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id_user',
-        'id_konselor',
-        'nama_layanan',
-        'voucher',
-        'total',
-        'payment_status',
+        'id_order', 'id_user', 'id_konselor', 'nama_layanan', 
+        'voucher', 'total', 'payment_status', 'bukti_transfer'
     ];
 }

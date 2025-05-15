@@ -41,7 +41,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
@@ -76,5 +76,15 @@ return [
     'links' => [
         public_path('storage') => storage_path('app/public'),
     ],
+
+    // 'temporary_file_upload' => [
+    //     'disk' => 'public',
+    //     'rules' => 'file|mimes:jpg,jpeg,png|max:2048',
+    //     'directory' => null,
+    //     'middleware' => null,
+    //     'preview_mimes' => ['png', 'jpg', 'jpeg'],
+    //     'max_upload_time' => 5, // menit
+    // ],
+
 
 ];
