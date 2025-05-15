@@ -29,7 +29,11 @@
 
                     @canRole('ADMIN', 'CABANG')
                     <flux:navlist.item wire:navigate><i class="bi bi-chat-heart"></i> {{ __('History Konsultasi') }}</flux:navlist.item>
-                    @endcanRole                
+                    @endcanRole       
+                    
+                    {{-- <flux:navlist.item :href="url('/chatify')" :current="request()->is('chatify')" wire:navigate>
+                        <i class="bi bi-chat-dots"></i> Chat
+                    </flux:navlist.item> --}}
 
                 </flux:navlist.group>
             </flux:navlist>
