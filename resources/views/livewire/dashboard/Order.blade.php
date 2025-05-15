@@ -43,6 +43,9 @@
                                     {{ $order->payment_status == 'BELUM BAYAR' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' }}">
                                     {{ $order->payment_status }}
                                 </span>
+                                <button onclick="startConversation({{ $order->id_konselor }})" class="btn btn-primary">
+                                    Mulai Chat
+                                </button>
                             </td>
                             <td class="py-3 px-6">
                                 @if($order->bukti_transfer)
@@ -88,4 +91,9 @@
                     </div>
                 </div>
             </div>
+            <script>
+                function startConversation(userId) {
+                    window.location.href = `/chatify/${userId}`;
+                }
+            </script>
 </div>

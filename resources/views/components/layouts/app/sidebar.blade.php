@@ -27,6 +27,7 @@
                     @canRole('USER') 
                         <flux:navlist.item icon="banknotes" :href="route('orders')" wire:navigate> {{ __('Data Pembayaran') }}</flux:navlist.item>
                     @endcanRole
+
            
                 </flux:navlist.group>
             </flux:navlist>
