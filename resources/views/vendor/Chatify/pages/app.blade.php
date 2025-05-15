@@ -5,7 +5,7 @@
         {{-- Header and search bar --}}
         <div class="m-header">
             <nav>
-                <a href="#"><i class="fas fa-inbox"></i> <span class="messenger-headTitle">MESSAGES</span> </a>
+                <a href="#"><i class="fas fa-inbox"></i> <span class="messenger-headTitle">EKONSUL</span> </a>
                 {{-- header buttons --}}
                 <nav class="m-header-right">
                     <a href="#"><i class="fas fa-cog settings-btn"></i></a>
@@ -13,7 +13,9 @@
                 </nav>
             </nav>
             {{-- Search input --}}
-            <input type="text" class="messenger-search" placeholder="Search" />
+            @canRole('ADMIN','KONSELOR','CABANG')
+                <input type="text" class="messenger-search" placeholder="Search" />
+            @endcanRole
             {{-- Tabs --}}
             {{-- <div class="messenger-listView-tabs">
                 <a href="#" class="active-tab" data-view="users">
@@ -31,11 +33,13 @@
                 <div class="messenger-favorites app-scroll-hidden"></div>
                </div>
                {{-- Saved Messages --}}
-               <p class="messenger-title"><span>Your Space</span></p>
-               {!! view('Chatify::layouts.listItem', ['get' => 'saved']) !!}
+               {{-- <p class="messenger-title"><span>Your Space</span></p>
+               {!! view('Chatify::layouts.listItem', ['get' => 'saved']) !!} --}}
                {{-- Contact --}}
+               @canRole('ADMIN','KONSELOR','CABANG')
                <p class="messenger-title"><span>All Messages</span></p>
                <div class="listOfContacts" style="width: 100%;height: calc(100% - 272px);position: relative;"></div>
+               @endcanRole
            </div>
              {{-- ---------------- [ Search Tab ] ---------------- --}}
            <div class="messenger-tab search-tab app-scroll" data-view="search">
@@ -62,9 +66,9 @@
                 </div>
                 {{-- header buttons --}}
                 <nav class="m-header-right">
-                    <a href="#" class="add-to-favorite"><i class="fas fa-star"></i></a>
-                    <a href="/"><i class="fas fa-home"></i></a>
-                    <a href="#" class="show-infoSide"><i class="fas fa-info-circle"></i></a>
+                    {{-- <a href="#" class="add-to-favorite"><i class="fas fa-star"></i></a> --}}
+                    <a href="/"><i class="fas fa-times"></i></a>
+                    {{-- <a href="#" class="show-infoSide"><i class="fas fa-info-circle"></i></a> --}}
                 </nav>
             </nav>
             {{-- Internet connection --}}
@@ -98,6 +102,7 @@
         @include('Chatify::layouts.sendForm')
     </div>
     {{-- ---------------------- Info side ---------------------- --}}
+    @canRole('ADMIN')
     <div class="messenger-infoView app-scroll">
         {{-- nav actions --}}
         <nav>
@@ -106,6 +111,7 @@
         </nav>
         {!! view('Chatify::layouts.info')->render() !!}
     </div>
+    @endcanRole
 </div>
 
 @include('Chatify::layouts.modals')

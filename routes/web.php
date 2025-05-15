@@ -43,6 +43,7 @@ Route::middleware(['auth'])->group(function () {
     ->name('orders')
     ->middleware('role:USER'); // <- pastikan ini adalah controller biasa
 
+
     Route::redirect('settings', 'settings/profile');
     Volt::route('settings/profile-detail', ProfileDetail::class)->name('settings.profile-detail');
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');

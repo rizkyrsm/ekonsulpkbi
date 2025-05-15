@@ -27,6 +27,14 @@
                     @canRole('USER') 
                         <flux:navlist.item icon="banknotes" :href="route('orders')" wire:navigate> {{ __('Data Pembayaran') }}</flux:navlist.item>
                     @endcanRole
+                    @canRole('KONSELOR','USER','ADMIN','CABANG') 
+                        <flux:navlist.item 
+                            icon="chat-bubble-left-right" 
+                            href="{{ url('/chatify/' . Auth()->user()->id) }}" 
+                            wire:navigate>
+                            {{ __('History Konseling') }}
+                        </flux:navlist.item>
+                    @endcanRole
 
            
                 </flux:navlist.group>
