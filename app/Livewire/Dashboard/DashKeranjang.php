@@ -66,6 +66,7 @@ class DashKeranjang extends Component
             $this->message = 'Voucher tidak valid!';
             $this->vouchernofalid = 'tidak valid!';
             $this->jenispotongan = '';
+            $this->voucher = '';
         }
 
         $this->total = array_sum($this->hargaSetelahDiskon);

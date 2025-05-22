@@ -7,25 +7,127 @@ use Livewire\WithPagination;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class DashOrder extends Component
 {
+    use WithPagination, WithFileUploads;
 
-    public $search = '';
     public $perPage = 5;
+    public $bukti_transfer;
+    public $uploadingOrderId = null;
 
-    protected $updatesQueryString = ['search'];
+    protected $rules = [
+        'bukti_transfer' => 'image|max:2048', // maksimal 2MB
+    ];
 
     public function updatingSearch()
     {
         $this->resetPage();
     }
 
+    public function showUploadForm($orderId)
+    {
+        $this->uploadingOrderId = $orderId;
+        $this->bukti_transfer = null;
+    }
+
+    public function cancelUpload()
+    {
+        $this->uploadingOrderId = null;
+        $this->bukti_transfer = null;
+    }
+
+    public function uploadBukti()
+    {
+        $this->validate();
+
+        $order = Order::where('id_order', $this->uploadingOrderId)
+            ->where('id_user', Auth::id())
+            ->firstOrFail();
+
+        $filename = $this->bukti_transfer->store('bukti-transfer', 'public');
+        $order->bukti_transfer = $filename;
+        $order->save();
+
+        session()->flash('success', 'Bukti transfer berhasil diupload.');
+        $this->reset(['bukti_transfer', 'uploadingOrderId']);
+    }
+
+    public $editingStatusId = null;
+    public $newStatus = null;
+
+    public function editStatus($id)
+    {
+        $this->editingStatusId = $id;
+        $order = Order::findOrFail($id);
+        $this->newStatus = $order->payment_status;
+    }
+
+    public function cancelEditStatus()
+    {
+        $this->editingStatusId = null;
+        $this->newStatus = null;
+    }
+
+    public function updateStatus($id)
+    {
+        $this->validate([
+            'newStatus' => 'required|in:BELUM BAYAR,LUNAS',
+        ]);
+
+        $order = Order::findOrFail($id);
+        $order->payment_status = $this->newStatus;
+        $order->save();
+
+        session()->flash('success', 'Status pembayaran berhasil diperbarui.');
+        $this->cancelEditStatus();
+    }
+
+    public function deleteBuktiTransfer($orderId)
+    {
+        $order = Order::findOrFail($orderId);
+
+        // Hanya ADMIN dan CABANG yang boleh hapus
+        if (!in_array(Auth::user()->role, ['ADMIN', 'CABANG'])) {
+            abort(403, 'Unauthorized');
+        }
+
+        // Hapus file dari storage
+        if ($order->bukti_transfer && Storage::disk('public')->exists($order->bukti_transfer)) {
+            Storage::disk('public')->delete($order->bukti_transfer);
+        }
+
+        // Set kolom bukti_transfer jadi null
+        $order->bukti_transfer = null;
+        $order->save();
+
+        session()->flash('success', 'Bukti transfer berhasil dihapus.');
+    }
+
     public function render()
     {
-        $orders = Order::where('id_user', Auth::id())
-            ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage);
+        if (Auth::user()->role === 'ADMIN') {
+             $orders = Order::join('users', 'orders.id_user', '=', 'users.id')
+                ->leftJoin('detail_users', 'orders.id_konselor', '=', 'detail_users.id_user')
+                ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
+                ->orderBy('orders.created_at', 'desc')
+                ->paginate($this->perPage);
+        } else if (Auth::user()->role === 'CABANG') {
+            $orders = Order::join('users', 'orders.id_user', '=', 'users.id')
+                ->leftJoin('detail_users', 'orders.id_konselor', '=', 'detail_users.id_user')
+                ->where('detail_users.id_cabang', Auth::user()->id)
+                ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
+                ->orderBy('orders.created_at', 'desc')
+                ->paginate($this->perPage);
+        } else {
+             $orders = Order::join('users', 'orders.id_user', '=', 'users.id')
+                ->where('orders.id_user', Auth::id())
+                ->join('detail_users', 'orders.id_konselor', '=', 'detail_users.id_user')
+                ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
+                ->orderBy('orders.created_at', 'desc')
+                ->paginate($this->perPage);
+        }
 
         return view('livewire.dashboard.order', compact('orders'));
     }

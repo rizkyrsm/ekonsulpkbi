@@ -24,6 +24,7 @@
                     <tr class="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
                         <th class="py-3 px-6 text-left">ID Order</th>
                         <th class="py-3 px-6 text-left">Nama Layanan</th>
+                        <th class="py-3 px-6 text-left">Konselor</th>
                         <th class="py-3 px-6 text-left">Voucher</th>
                         <th class="py-3 px-6 text-left">Total Payment</th>
                         <th class="py-3 px-6 text-left">Status</th>
@@ -36,6 +37,7 @@
                         <tr class="border-b hover:bg-gray-50">
                             <td class="py-3 px-6">{{ $order->id_order }}</td>
                             <td class="py-3 px-6">{{ $order->nama_layanan }}</td>
+                            <td class="py-3 px-6">{{ $order->konselor_name }}</td>
                             <td class="py-3 px-6">{{ $order->voucher ?? '-' }}</td>
                             <td class="py-3 px-6">Rp. {{ number_format($order->total, 0, ',', '.') }}</td>
                             <td class="py-3 px-6">
@@ -43,15 +45,70 @@
                                     {{ $order->payment_status == 'BELUM BAYAR' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' }}">
                                     {{ $order->payment_status }}
                                 </span>
-                                <button onclick="startConversation({{ $order->id_konselor }})" class="btn btn-primary">
-                                    Mulai Chat
-                                </button>
+
+                                @if (auth()->user()->role === 'ADMIN')
+                                    <button wire:click="editStatus({{ $order->id_order }})"
+                                        class="ml-2 bg-yellow-500 text-white px-2 py-1 rounded text-xs hover:bg-yellow-600">
+                                        Edit
+                                    </button>
+                                @endif
+
+                                {{-- Form edit status (jika sedang diedit) --}}
+                                @if ($editingStatusId === $order->id_order)
+                                    <div class="mt-2 flex items-center space-x-2">
+                                        <select wire:model="newStatus" class="text-xs border rounded px-2 py-1">
+                                            <option value="">-- Pilih Status --</option>
+                                            <option value="BELUM BAYAR">BELUM BAYAR</option>
+                                            <option value="LUNAS">LUNAS</option>
+                                        </select>
+                                        <button wire:click="updateStatus({{ $order->id_order }})"
+                                            class="bg-green-500 text-white px-2 py-1 rounded text-xs hover:bg-green-600">Simpan</button>
+                                        <button wire:click="cancelEditStatus"
+                                            class="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600">Batal</button>
+                                    </div>
+                                @endif
                             </td>
+
+                            {{-- Upload Bukti Transfer --}}
                             <td class="py-3 px-6">
                                 @if($order->bukti_transfer)
+                                    <a href="{{ asset('storage/' . $order->bukti_transfer) }}" target="_blank" class="bg-green-500 text-white px-2 py-1 rounded text-xs hover:bg-green-600">
                                         Lihat Bukti
+                                    </a>
+
+                                    @canRole('ADMIN','CABANG')
+                                        <button wire:click="deleteBuktiTransfer({{ $order->id_order }})"
+                                            onclick="confirm('Yakin ingin menghapus bukti transfer?') || event.stopImmediatePropagation()"
+                                            class="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600">
+                                            Hapus
+                                        </button>
+                                    @endcanRole
                                 @else
-                                        Upload
+                                    @canRole('USER')
+                                    @if ($uploadingOrderId !== $order->id_order)
+                                        <button wire:click="showUploadForm({{ $order->id_order }})"
+                                            class="bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600">
+                                            Upload
+                                        </button>
+                                    @else
+                                        <div class="flex flex-col space-y-2 mt-2">
+                                            <input type="file" wire:model="bukti_transfer" accept="image/*" class="text-xs">
+                                            <div wire:loading wire:target="bukti_transfer" class="text-xs text-gray-500">
+                                                Mengunggah...
+                                            </div>
+                                            @error('bukti_transfer') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+
+                                            <div class="flex space-x-2">
+                                                <button wire:click="uploadBukti" class="bg-green-500 text-white px-2 py-1 rounded text-xs hover:bg-green-600">
+                                                    Simpan
+                                                </button>
+                                                <button wire:click="cancelUpload" class="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600">
+                                                    Batal
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @endcanRole
                                 @endif
                             </td>
 
@@ -91,9 +148,4 @@
                     </div>
                 </div>
             </div>
-            <script>
-                function startConversation(userId) {
-                    window.location.href = `/chatify/${userId}`;
-                }
-            </script>
 </div>
