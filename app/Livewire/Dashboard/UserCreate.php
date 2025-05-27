@@ -128,9 +128,9 @@ class UserCreate extends Component
             $idCabang = Auth()->user()->id;
 
             $query->join('detail_users', 'users.id', '=', 'detail_users.id_user')
-            ->leftJoin('users as cabang_user', 'detail_users.id_cabang', '=', 'cabang_user.id') // Left join dengan cabang_user
-            ->where('users.role', 'KONSELOR') // Hanya menampilkan konselor
-            ->where('detail_users.id_cabang', $idCabang); // Filter berdasarkan id_cabang milik user yang login
+                ->leftJoin('users as cabang_user', 'detail_users.id_cabang', '=', 'cabang_user.id') // Left join dengan cabang_user
+                ->where('users.role', 'KONSELOR') // Hanya menampilkan konselor
+                ->where('detail_users.id_cabang', $idCabang); // Filter berdasarkan id_cabang milik user yang login
         }
         // Jika role KONSELOR, tampilkan pengguna biasa
         else if ($userRole === 'KONSELOR') {
@@ -160,7 +160,8 @@ class UserCreate extends Component
             ->select(
                 'users.*',
                 'cabang_user.name as cabang_name', // Nama cabang jika ada
-                'detail_users.id_cabang' // ID cabang jika ada
+                'detail_users.id_cabang', // ID cabang jika ada
+                'detail_users.status_online' // ID cabang jika ada
             )
             ->paginate(5);
 
@@ -173,5 +174,19 @@ class UserCreate extends Component
         $user = User::findOrFail($userId);
         $user->status = $user->status === 'ACTIVE' ? 'NONACTIVE' : 'ACTIVE';
         $user->save();
+    }
+
+    public function toggleStatusChat($userId)
+    {
+        $detail = DetailUser::where('id_user', $userId)->first();
+
+        $newStatus = ($detail && $detail->status_online === 'online') ? 'offline' : 'online';
+
+        DetailUser::updateOrCreate(
+            ['id_user' => $userId],
+            ['status_online' => $newStatus]
+        );
+
+        session()->flash('message', "Status chat pengguna berhasil diperbarui.");
     }
 }

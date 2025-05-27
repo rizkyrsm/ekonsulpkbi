@@ -130,6 +130,16 @@
                             <button wire:click="toggleStatus({{ $user->id }})" class="text-sm px-2 py-1 rounded {{ $user->status === 'ACTIVE' ? 'bg-green-500 text-white' : 'bg-red-400 text-white' }}">
                                 {{ $user->status === 'ACTIVE' ? 'ACTIVE' : 'NONACTIVE' }}
                             </button>
+                        @canRole('CABANG')
+                            <button wire:click="toggleStatusChat({{ $user->id }})" class="text-sm px-2 py-1 rounded {{ $user->status_online === 'online' ? 'bg-green-500 text-white' : 'bg-red-400 text-white' }}">
+                                <i class="bi bi-wifi"></i> {{ $user->status_online === 'online' ? 'online' : 'offline' }}
+                            </button>
+                        @endcanRole
+                        @canRole('ADMIN')
+                            <span class="text-sm px-2 py-1 rounded {{ $user->status_online === 'online' ? 'bg-green-500 text-white' : 'bg-red-400 text-white' }}">
+                                {{ $user->status_online === 'online' ? 'online' : 'offline' }}
+                            </span>
+                        @endcanRole
                         </td>
                     </tr>
                 @empty
