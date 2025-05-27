@@ -10,7 +10,7 @@ class ProfileDetail extends Component
 {
     public $nama, $nik, $tgl_lahir, $alamat, $no_tlp;
     public $status_online = 'online'; // default nilai awal
-    public $jenis_kelamin, $tempat_lahir, $status_pernikahan, $agama;
+    public $jenis_kelamin, $tempat_lahir, $status_pernikahan, $agama,$perkerjaan;
 
     public function mount()
     {
@@ -27,6 +27,7 @@ class ProfileDetail extends Component
             $this->jenis_kelamin = $data->jenis_kelamin;
             $this->status_pernikahan = $data->status_pernikahan;
             $this->agama = $data->agama;
+            $this->perkerjaan = $data->perkerjaan;
         } else {
             // Jika data belum ada, set default
             $this->status_online = 'online';
@@ -56,6 +57,7 @@ class ProfileDetail extends Component
             'jenis_kelamin' => 'required|in:LAKI-LAKI,PEREMPUAN,LAINYA',
             'status_pernikahan' => 'required|in:MENIKAH,BELUM MENIKAH,TIDAK MENIKAH',
             'agama' => 'required|string|max:50',
+            'perkerjaan' => 'required|string|max:255',
         ]);
 
         DetailUser::updateOrCreate(
@@ -71,6 +73,7 @@ class ProfileDetail extends Component
                 'jenis_kelamin' => $this->jenis_kelamin,
                 'status_pernikahan' => $this->status_pernikahan,
                 'agama' => $this->agama,
+                'perkerjaan' => $this->perkerjaan,
             ]
         );
 

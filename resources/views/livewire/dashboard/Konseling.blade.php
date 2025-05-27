@@ -36,42 +36,87 @@
                         <tr class="border-b hover:bg-gray-50">
                             <td class="py-3 px-6">{{ $konseling->id_order }}</td>
                             <td class="py-3 px-6">
-                                {{-- <a href="{{ url('/chatify/' . $konseling->id_konselor) }}"
-                                class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold px-4 py-2 rounded">
-                                    Lihat Obrolan
-                                </a> --}}
                                 @canRole('ADMIN','CABANG')
                                     @php
                                         $from_id = $konseling->id_konselor;
                                         $to_id = $konseling->id_user;
                                     @endphp
 
-                                    <button onclick="openChatPopup('{{ $from_id }}', '{{ $to_id }}')" class="bg-blue-500 text-white px-4 py-2 rounded">
+                                    <button onclick="openChatPopup('{{ $from_id }}', '{{ $to_id }}')" class="bg-green-500 text-white px-4 py-2 rounded">
                                         <i class="bi bi-chat-heart-fill"></i> Open
                                     </button>
                                 @endcanRole
                                 @canRole('KONSELOR')
-                                   <button onclick="openStartChat('{{ $konseling->id_user }}')" 
-                                        class="bg-blue-500 text-white px-4 py-2 rounded">
-                                        <i class="bi bi-chat-heart-fill"></i> Mulai Konsultasi
-                                    </button>
+                                    @php
+                                        $from_id = $konseling->id_konselor;
+                                        $to_id = $konseling->id_user;
+                                    @endphp
+
+                                    @if ($konseling->payment_status == 'SELESAI')
+                                        <button onclick="openChatPopup('{{ $from_id }}', '{{ $to_id }}')" 
+                                            class="bg-green-500 text-white px-4 py-2 rounded">
+                                            <i class="bi bi-chat-heart-fill"></i> Open
+                                        </button>
+                                    @else
+                                        <button onclick="openStartChat('{{ $konseling->id_user }}')" 
+                                            class="bg-blue-500 text-white px-4 py-2 rounded">
+                                            <i class="bi bi-chat-heart-fill"></i> Mulai Konsultasi
+                                        </button>
+                                    @endif
                                 @endcanRole
+
                                 @canRole('USER')
-                                   <button onclick="openStartChat('{{ $konseling->id_konselor }}')" 
-                                        class="bg-blue-500 text-white px-4 py-2 rounded">
-                                        <i class="bi bi-chat-heart-fill"></i> Mulai Konsultasi
-                                    </button>
+                                    @php
+                                        $from_id = $konseling->id_konselor;
+                                        $to_id = $konseling->id_user;
+                                    @endphp
+
+                                    @if ($konseling->payment_status == 'SELESAI')
+                                        <button onclick="openChatPopup('{{ $from_id }}', '{{ $to_id }}')" 
+                                            class="bg-blue-500 text-white px-4 py-2 rounded">
+                                            <i class="bi bi-green-heart-fill"></i> Open
+                                        </button>
+                                    @else
+                                       <button onclick="checkProfileAndStartChat('{{ $konseling->id_user }}')" 
+                                            class="bg-blue-500 text-white px-4 py-2 rounded">
+                                            <i class="bi bi-chat-heart-fill"></i> Mulai Konsultasi
+                                        </button>
+                                    @endif
                                 @endcanRole
+
                                 
                             </td>
-                            <td class="py-3 px-6">{{ $konseling->user_name }}</td>
+                            {{-- <td class="py-3 px-6">{{ $konseling->user_name }}</td> --}}
+                            <td class="py-3 px-6">
+                                <button 
+                                    onclick="showProfileModal({{ $konseling->id_user }})" 
+                                    class="ml-2 text-sm text-blue-600 hover:underline"
+                                >
+                                    <span class="px-2 text-white inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-500">{{ $konseling->user_name }} </span>
+                                </button>
+                            </td>
                             <td class="py-3 px-6">{{ $konseling->nama_layanan }}</td>
                             <td class="py-3 px-6">{{ $konseling->konselor_name }}</td>
                             <td class="py-3 px-6">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                    {{ $konseling->payment_status == 'BELUM BAYAR' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' }}">
-                                    {{ $konseling->payment_status }}
-                                </span>
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                        {{ $konseling->payment_status == 'BELUM BAYAR' ? 'bg-red-500 text-red-800' : 'bg-green-500 text-green-800' }}">
+                                        {{ $konseling->payment_status == 'LUNAS' ? 'AKTIF' : 'SELESAI' }}
+                                    </span>
+                                @canRole('KONSELOR')
+                                    @if ($konseling->payment_status == 'LUNAS')
+                                        <form method="POST" action="{{ route('konseling.updateStatus', $konseling->id_order) }}" class="d-inline" onsubmit="return confirm('Yakin ingin menyelesaikan sesi ini?')">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">
+                                                Tandai Selesai
+                                            </button>
+                                        </form>
+                                    @endif
+                                @endcanRole
+                                </div>
+                            </td>
+
                             <td class="py-3 px-6">{{ $konseling->created_at->format('d M Y H:i') }}</td>
                         </tr>
                     @endforeach
@@ -107,9 +152,7 @@
         <div id="chat-start-popup" class="fixed bottom-10 right-4 w-100 h-[650px] bg-white shadow-xl hidden z-50">
             <div class="flex justify-between items-center text-white p-2 bg-green-800 border-b">
                 <h1 class="text-xl font-bold mb-4">Chat</h1>
-                <button onclick="closeStartChatPopup()" class="text-white px-3 py-1 rounded bg-red-600 hover:bg-red-700">
-                    Close
-                </button>
+                <flux:button onclick="closeStartChatPopup()" icon="x-mark" variant="danger" size="sm"></flux:button>
             </div>
             <iframe id="chat-start-frame" src="" class="w-full h-full border-none"></iframe>
         </div>
@@ -126,8 +169,65 @@
             }
 
         </script>
-
     {{-- akhir modal memulai chat --}}
 
+    {{-- Modal untuk user profile detail --}}
+    <div id="profileModal" class="fixed inset-0 hidden z-50 flex items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 border rounded-lg shadow-lg w-full max-w-md p-6 relative">
+            <button onclick="closeProfileModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">&times;</button>
+            <h2 class="text-xl font-bold mb-4">Detail Profil</h2>
+            <div id="profileContent">
+                <p>Memuat...</p>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        function showProfileModal(userId) {
+            document.getElementById('profileModal').classList.remove('hidden');
+            document.getElementById('profileContent').innerHTML = 'Memuat...';
+
+            fetch(`/profile-detail-json/${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('profileContent').innerHTML = `
+                        <p><strong>Nama:</strong> ${data.nama}</p>
+                        <p><strong>NIK:</strong> ${data.nik}</p>
+                        <p><strong>Tempat, Tanggal Lahir:</strong> ${data.tempat_lahir}, ${data.tgl_lahir}</p>
+                        <p><strong>Alamat:</strong> ${data.alamat}</p>
+                        <p><strong>No Telepon:</strong> ${data.no_tlp}</p>
+                        <p><strong>Status Online:</strong> ${data.status_online}</p>
+                        <p><strong>Jenis Kelamin:</strong> ${data.jenis_kelamin}</p>
+                        <p><strong>Status Pernikahan:</strong> ${data.status_pernikahan}</p>
+                        <p><strong>Agama:</strong> ${data.agama}</p>
+                    `;
+                });
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.add('hidden');
+        }
+    </script>
+    {{-- Akhir modal profile --}}
+
+    {{-- CEK ISI DETAIL USER --}}
+        <script>
+            function checkProfileAndStartChat(userId) {
+                fetch(`/check-profile/${userId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.complete) {
+                            openStartChat(userId);
+                        } else {
+                            alert('Profil Anda belum lengkap. Silakan lengkapi profil terlebih dahulu.');
+                            window.location.href = 'settings/profile-detail';
+                        }
+                    })
+                    .catch(err => {
+                        alert('Terjadi kesalahan. Coba lagi.');
+                        console.error(err);
+                    });
+            }
+        </script>
+    {{-- AKHIR CEK DETAIL --}}
 </div>

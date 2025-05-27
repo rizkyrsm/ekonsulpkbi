@@ -19,8 +19,8 @@
             <flux:input wire:model="tgl_lahir" :label="__('Tanggal Lahir')" type="date" required />
             @error('tgl_lahir') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
 
-            <flux:input wire:model="alamat" :label="__('Alamat')" type="text" required />
-            @error('alamat') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+            {{-- <flux:input wire:model="alamat" :label="__('Alamat')" type="text" required />
+            @error('alamat') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror --}}
 
             <flux:input wire:model="no_tlp" :label="__('No Telepon')" type="text" inputmode="numeric" pattern="[0-9]*" required />
             @error('no_tlp') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
@@ -48,6 +48,9 @@
 
             <flux:input wire:model="tempat_lahir" :label="__('Tempat Lahir')" type="text" required />
                 @error('tempat_lahir') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+            
+            <flux:input wire:model="perkerjaan" :label="__('Perkerjaan')" type="text" required />
+                @error('perkerjaan') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Status Pernikahan') }}</label>

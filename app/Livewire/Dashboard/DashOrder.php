@@ -73,7 +73,7 @@ class DashOrder extends Component
     public function updateStatus($id)
     {
         $this->validate([
-            'newStatus' => 'required|in:BELUM BAYAR,LUNAS',
+            'newStatus' => 'required|in:BELUM BAYAR,LUNAS,SELESAI',
         ]);
 
         $order = Order::findOrFail($id);

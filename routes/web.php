@@ -19,14 +19,6 @@ Route::get('/dashboard', [DashController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-    // web.php
-Route::get('/custom-chat/{from_id}/{to_id}', function ($from_id, $to_id) {
-    // Lakukan autentikasi manual atau validasi dari backend
-    // Redirect ke Chatify jika perlu
-    return view('custom-chat', compact('from_id', 'to_id'));
-});
-
-
 Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return redirect()->route('dashboard');
@@ -54,6 +46,30 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/konseling', DashKonseling::class)
         ->name('konseling'); // <- pastikan ini adalah controller biasa
+    Route::patch('/konseling/{id}/update-status', [DashKonseling::class, 'updateStatus'])->name('konseling.updateStatus');
+
+    Route::get('/custom-chat/{from_id}/{to_id}', function ($from_id, $to_id) {
+        // Lakukan autentikasi manual atau validasi dari backend
+        // Redirect ke Chatify jika perlu
+        return view('custom-chat', compact('from_id', 'to_id'));
+    });
+
+    // untuk menampilkan profil di halaman konseling
+    Route::get('/profile-detail-json/{id}', function ($id) {
+        $detail = \App\Models\DetailUser::where('id_user', $id)->first();
+        if (!$detail) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+        return response()->json($detail);
+    });
+
+    // sebelum chat harus melengkapi profile
+    Route::get('/check-profile/{id}', function ($id) {
+        $data = \App\Models\DetailUser::where('id_user', $id)->first();
+        $requiredFields = ['nama', 'nik', 'tgl_lahir', 'tempat_lahir', 'alamat', 'no_tlp', 'status_online', 'jenis_kelamin', 'status_pernikahan', 'agama'];
+        $isComplete = $data && collect($requiredFields)->every(fn($field) => !empty($data->$field));
+        return response()->json(['complete' => $isComplete]);
+    });
 
 
     Route::redirect('settings', 'settings/profile');

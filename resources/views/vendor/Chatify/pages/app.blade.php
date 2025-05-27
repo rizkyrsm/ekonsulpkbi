@@ -66,7 +66,7 @@
                     @php
                         $chatUser = \App\Models\User::with('detailUser')->find($id);
                     @endphp
-                    <a href="#" class="user-name">{{ $chatUser->detailUser->nama ?? $chatUser->name }}</a>
+                    <a href="#" class="">{{ $chatUser->detailUser->nama ?? $chatUser->name }}</a>
                 </div>
                 {{-- header buttons --}}
                 <nav class="m-header-right">

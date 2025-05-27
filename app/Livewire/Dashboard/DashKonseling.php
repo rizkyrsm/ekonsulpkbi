@@ -10,6 +10,19 @@ use Illuminate\Support\Facades\Auth;
 class DashKonseling extends Component
 {
 
+    public function updateStatus($id)
+    {
+        $konseling = Order::findOrFail($id);
+
+        if ($konseling->payment_status === 'LUNAS') {
+            $konseling->payment_status = 'SELESAI';
+            $konseling->save();
+        }
+
+        return back()->with('success', 'Status berhasil diperbarui menjadi SELESAI.');
+    }
+
+
     public function showUserMessages($selectedUserId)
     {
         $authId = Auth::id();
@@ -41,14 +54,14 @@ class DashKonseling extends Component
             $konselings = Order::join('users', 'orders.id_user', '=', 'users.id')
                 ->leftJoin('detail_users', 'orders.id_konselor', '=', 'detail_users.id_user')
                 ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
-                ->where('orders.payment_status', 'LUNAS')
+                ->where('orders.payment_status', ['LUNAS', 'SELESAI'])
                 ->orderBy('orders.created_at', 'desc')
                 ->paginate($this->perPage);
         } else if (Auth::user()->role === 'CABANG') {
             $konselings = Order::join('users', 'orders.id_user', '=', 'users.id')
                 ->leftJoin('detail_users', 'orders.id_konselor', '=', 'detail_users.id_user')
                 ->where('detail_users.id_cabang', Auth::user()->id)
-                ->where('orders.payment_status', 'LUNAS')
+                ->whereIn('orders.payment_status', ['LUNAS', 'SELESAI'])
                 ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
                 ->orderBy('orders.created_at', 'desc')
                 ->paginate($this->perPage);
@@ -56,7 +69,7 @@ class DashKonseling extends Component
             $konselings = Order::join('users', 'orders.id_user', '=', 'users.id')
                 ->leftJoin('detail_users', 'orders.id_konselor', '=', 'detail_users.id_user')
                 ->where('orders.id_konselor', Auth::id())
-                ->where('orders.payment_status', 'LUNAS')
+                ->whereIn('orders.payment_status', ['LUNAS', 'SELESAI'])
                 ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
                 ->orderBy('orders.created_at', 'desc')
                 ->paginate($this->perPage);
@@ -64,7 +77,7 @@ class DashKonseling extends Component
             $konselings = Order::join('users', 'orders.id_user', '=', 'users.id')
                 ->join('detail_users', 'orders.id_konselor', '=', 'detail_users.id_user')
                 ->where('orders.id_user', Auth::id())
-                ->where('orders.payment_status', 'LUNAS')
+                ->whereIn('orders.payment_status', ['LUNAS', 'SELESAI'])
                 ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
                 ->orderBy('orders.created_at', 'desc')
                 ->paginate($this->perPage);

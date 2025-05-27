@@ -42,7 +42,7 @@
                             <td class="py-3 px-6">Rp. {{ number_format($order->total, 0, ',', '.') }}</td>
                             <td class="py-3 px-6">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                    {{ $order->payment_status == 'BELUM BAYAR' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' }}">
+                                    {{ $order->payment_status == 'BELUM BAYAR' ? 'bg-red-300 text-red-800' : 'bg-green-300 text-green-800' }}">
                                     {{ $order->payment_status }}
                                 </span>
 
