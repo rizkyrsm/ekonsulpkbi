@@ -62,7 +62,11 @@
                     {{-- <a href="#" class="show-listView"><i class="fas fa-arrow-left"></i></a> --}}
                     <div class="avatar av-s header-avatar" style="margin: 0px 10px; margin-top: -5px; margin-bottom: -5px;">
                     </div>
-                    <a href="#" class="user-name">{{ config('chatify.name') }}</a>
+                    {{-- <a href="#" class="user-name">{{ config('chatify.name') }}</a> --}}
+                    @php
+                        $chatUser = \App\Models\User::with('detailUser')->find($id);
+                    @endphp
+                    <a href="#" class="user-name">{{ $chatUser->detailUser->nama ?? $chatUser->name }}</a>
                 </div>
                 {{-- header buttons --}}
                 <nav class="m-header-right">

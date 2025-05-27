@@ -11,18 +11,22 @@ class DetailUser extends Model
     use HasFactory;
     protected $table = 'detail_users';
     protected $primaryKey = 'id_detail';
-    
+
     protected $fillable = [
         'id_user',
         'id_cabang',
         'nama',
         'nik',
         'tgl_lahir',
+        'tempat_lahir',
         'alamat',
         'no_tlp',
         'status_online',
         'jenis_kelamin',
+        'status_pernikahan',
+        'agama',
     ];
+
 
     public function user()
     {

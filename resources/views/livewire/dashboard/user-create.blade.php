@@ -125,7 +125,6 @@
                         <td class="py-2 px-3 space-x-2">
                             <button wire:click="edit({{ $user->id }})" class="text-blue-600 hover:bg-sky-100 hover:underline"><x-heroicon-o-pencil-square class="w-5 h-5 text-blue-700" /></button>
                             <button wire:click="delete({{ $user->id }})" wire:confirm="Apakah Anda yakin ingin menghapus user ini?" class="text-red-600 hover:bg-red-100 hover:underline"><x-heroicon-o-trash class="w-5 h-5 text-red-700" /></button>
-                            <button wire:click="startChat({{ $user->id }})" class="btn btn-primary">Chat</button>
                         </td>
                         <td class="py-2 px-3 space-x-2">
                             <button wire:click="toggleStatus({{ $user->id }})" class="text-sm px-2 py-1 rounded {{ $user->status === 'ACTIVE' ? 'bg-green-500 text-white' : 'bg-red-400 text-white' }}">

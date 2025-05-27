@@ -8,7 +8,9 @@ use App\Models\DetailUser;
 
 class ProfileDetail extends Component
 {
-    public $nama, $nik, $tgl_lahir, $alamat, $no_tlp, $status_online, $jenis_kelamin;
+    public $nama, $nik, $tgl_lahir, $alamat, $no_tlp;
+    public $status_online = 'online'; // default nilai awal
+    public $jenis_kelamin, $tempat_lahir, $status_pernikahan, $agama;
 
     public function mount()
     {
@@ -18,10 +20,16 @@ class ProfileDetail extends Component
             $this->nama = $data->nama;
             $this->nik = $data->nik;
             $this->tgl_lahir = $data->tgl_lahir;
+            $this->tempat_lahir = $data->tempat_lahir;
             $this->alamat = $data->alamat;
             $this->no_tlp = $data->no_tlp;
-            $this->status_online = $data->status_online;
+            $this->status_online = $data->status_online ?? 'online';
             $this->jenis_kelamin = $data->jenis_kelamin;
+            $this->status_pernikahan = $data->status_pernikahan;
+            $this->agama = $data->agama;
+        } else {
+            // Jika data belum ada, set default
+            $this->status_online = 'online';
         }
     }
 
@@ -41,10 +49,13 @@ class ProfileDetail extends Component
             'nama' => 'required|string|max:255',
             'nik' => 'required|numeric',
             'tgl_lahir' => 'required|date',
-            'alamat' => 'required|string|max:255',
+            'tempat_lahir' => 'required|string|max:255',
+            'alamat' => 'required|string|max:1000',
             'no_tlp' => 'required|numeric',
-            'status_online' => 'required|in:online,offline',
+            'status_online' => 'nullable|in:online,offline',
             'jenis_kelamin' => 'required|in:LAKI-LAKI,PEREMPUAN,LAINYA',
+            'status_pernikahan' => 'required|in:MENIKAH,BELUM MENIKAH,TIDAK MENIKAH',
+            'agama' => 'required|string|max:50',
         ]);
 
         DetailUser::updateOrCreate(
@@ -53,10 +64,13 @@ class ProfileDetail extends Component
                 'nama' => $this->nama,
                 'nik' => $this->nik,
                 'tgl_lahir' => $this->tgl_lahir,
+                'tempat_lahir' => $this->tempat_lahir,
                 'alamat' => $this->alamat,
                 'no_tlp' => $this->no_tlp,
-                'status_online' => $this->status_online,
+                'status_online' => $this->status_online ?: 'online',
                 'jenis_kelamin' => $this->jenis_kelamin,
+                'status_pernikahan' => $this->status_pernikahan,
+                'agama' => $this->agama,
             ]
         );
 
@@ -68,4 +82,3 @@ class ProfileDetail extends Component
         return view('livewire.settings.profile-detail');
     }
 }
-

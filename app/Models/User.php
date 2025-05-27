@@ -13,6 +13,11 @@ use Illuminate\Database\Eloquent\Collection;
 class User extends Authenticatable
 {
 
+    public function detailUser()
+    {
+        return $this->hasOne(DetailUser::class, 'id_user');
+    }
+
     public function canCreateChats(): bool
     {
         return $this->hasVerifiedEmail();

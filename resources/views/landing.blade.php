@@ -38,7 +38,7 @@
                 <div class="card" style="width: 18rem;">
                     <div class="card-body">
                         <h5 class="card-title">{{ $layanan->nama_layanan }}</h5>
-                        <h6 class="card-subtitle mb-2 text-body-secondary">VOUCHER : PKBIJATIM</h6>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">VOUCHER : PKBIJAYA</h6>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                         <br><s>Rp. {{ $layanan->harga_layanan }}</s>/Rp.0
                         <a href="{{ route('dashboard.keranjang', ['id' => $layanan->id_layanan]) }}" class="btn btn-success text-white card-link"><i class="bi bi-chat-heart-fill"></i> Mulai Konseling</a>

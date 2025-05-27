@@ -25,7 +25,7 @@
             <flux:input wire:model="no_tlp" :label="__('No Telepon')" type="text" inputmode="numeric" pattern="[0-9]*" required />
             @error('no_tlp') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
 
-            <div>
+            {{-- <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Status Online') }}</label>
                 <select wire:model="status_online" class="w-full dark:bg-gray-700 rounded-md border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500">
                     <option class="dark: bg-gray-600" value="">-- Pilih --</option>
@@ -33,7 +33,7 @@
                     <option class="dark: bg-gray-600" value="offline">offline</option>
                 </select>
                 @error('status_online') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-            </div>
+            </div> --}}
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Jenis Kelamin') }}</label>
@@ -45,6 +45,41 @@
                 </select>
                 @error('jenis_kelamin') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             </div>
+
+            <flux:input wire:model="tempat_lahir" :label="__('Tempat Lahir')" type="text" required />
+                @error('tempat_lahir') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Status Pernikahan') }}</label>
+                    <select wire:model="status_pernikahan" class="w-full rounded-md dark:bg-gray-700 border-gray-300 shadow-sm">
+                        <option value="">-- Pilih --</option>
+                        <option value="MENIKAH">MENIKAH</option>
+                        <option value="BELUM MENIKAH">BELUM MENIKAH</option>
+                        <option value="TIDAK MENIKAH">TIDAK MENIKAH</option>
+                    </select>
+                    @error('status_pernikahan') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Agama') }}</label>
+                    <select wire:model="agama" class="w-full rounded-md dark:bg-gray-700 border-gray-300 shadow-sm">
+                        <option value="">-- Pilih --</option>
+                        <option value="Islam">Islam</option>
+                        <option value="Kristen">Kristen</option>
+                        <option value="Katolik">Katolik</option>
+                        <option value="Hindu">Hindu</option>
+                        <option value="Buddha">Buddha</option>
+                        <option value="Konghucu">Konghucu</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+                    @error('agama') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                </div>
+
+                <div>
+                    <label for="alamat" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Alamat') }}</label>
+                    <textarea wire:model="alamat" rows="4" id="alamat" class="w-full rounded-md dark:bg-gray-700 border-gray-300 shadow-sm"></textarea>
+                    @error('alamat') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                </div>
 
             <div class="flex items-center gap-4">
                 <flux:button type="submit" variant="primary" class="w-full">

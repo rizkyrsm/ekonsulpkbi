@@ -53,13 +53,13 @@
                                 @canRole('KONSELOR')
                                    <button onclick="openStartChat('{{ $konseling->id_user }}')" 
                                         class="bg-blue-500 text-white px-4 py-2 rounded">
-                                        <i class="bi bi-chat-heart-fill"></i> Open
+                                        <i class="bi bi-chat-heart-fill"></i> Mulai Konsultasi
                                     </button>
                                 @endcanRole
                                 @canRole('USER')
                                    <button onclick="openStartChat('{{ $konseling->id_konselor }}')" 
                                         class="bg-blue-500 text-white px-4 py-2 rounded">
-                                        <i class="bi bi-chat-heart-fill"></i> Open
+                                        <i class="bi bi-chat-heart-fill"></i> Mulai Konsultasi
                                     </button>
                                 @endcanRole
                                 
