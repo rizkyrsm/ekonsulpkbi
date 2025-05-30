@@ -77,7 +77,7 @@
                                             <i class="bi bi-green-heart-fill"></i> Open
                                         </button>
                                     @else
-                                       <button onclick="checkProfileAndStartChat('{{ $konseling->id_user }}')" 
+                                       <button onclick="checkProfileAndStartChat('{{ $to_id }}', '{{ $from_id }}')"
                                             class="bg-blue-500 text-white px-4 py-2 rounded">
                                             <i class="bi bi-chat-heart-fill"></i> Mulai Konsultasi
                                         </button>
@@ -212,12 +212,12 @@
 
     {{-- CEK ISI DETAIL USER --}}
         <script>
-            function checkProfileAndStartChat(userId) {
+            function checkProfileAndStartChat(userId,konselorId) {
                 fetch(`/check-profile/${userId}`)
                     .then(res => res.json())
                     .then(data => {
                         if (data.complete) {
-                            openStartChat(userId);
+                            openStartChat(konselorId);
                         } else {
                             alert('Profil Anda belum lengkap. Silakan lengkapi profil terlebih dahulu.');
                             window.location.href = 'settings/profile-detail';

@@ -49,8 +49,8 @@
             <flux:input wire:model="tempat_lahir" :label="__('Tempat Lahir')" type="text" required />
                 @error('tempat_lahir') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             
-            <flux:input wire:model="perkerjaan" :label="__('Perkerjaan')" type="text" required />
-                @error('perkerjaan') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+            <flux:input wire:model="pekerjaan" :label="__('Pekerjaan')" type="text" required />
+                @error('pekerjaan') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('Status Pernikahan') }}</label>

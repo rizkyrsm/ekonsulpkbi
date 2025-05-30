@@ -25,7 +25,7 @@ class DetailUser extends Model
         'jenis_kelamin',
         'status_pernikahan',
         'agama',
-        'perkerjaan',
+        'pekerjaan',
     ];
 
 
