@@ -54,7 +54,7 @@ class DashKonseling extends Component
             $konselings = Order::join('users', 'orders.id_user', '=', 'users.id')
                 ->leftJoin('detail_users', 'orders.id_konselor', '=', 'detail_users.id_user')
                 ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
-                ->where('orders.payment_status', ['LUNAS', 'SELESAI'])
+                ->whereIn('orders.payment_status', ['LUNAS', 'SELESAI'])
                 ->orderBy('orders.created_at', 'desc')
                 ->paginate($this->perPage);
         } else if (Auth::user()->role === 'CABANG') {
