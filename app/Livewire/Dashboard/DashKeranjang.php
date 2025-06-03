@@ -27,6 +27,7 @@ class DashKeranjang extends Component
         // Mengambil data layanan
         $this->layanans = $id ? Layanan::where('id_layanan', $id)->get() : Layanan::all();
         $this->resetHarga();
+        $this->total = array_sum($this->hargaSetelahDiskon); // Hitung total awal
     }
 
     public function resetHarga()
@@ -74,6 +75,11 @@ class DashKeranjang extends Component
 
     public function saveOrder()
     {
+        if (!$this->total) {
+            // Hitung total default jika belum ada
+            $this->total = array_sum($this->hargaSetelahDiskon);
+        }
+
         $this->validate([
             'konselor' => 'required',
             'voucher' => 'nullable|string',
@@ -111,5 +117,4 @@ class DashKeranjang extends Component
             'konselors' => $this->konselors,
         ]);
     }
-    
 }

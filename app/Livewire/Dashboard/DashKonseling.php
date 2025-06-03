@@ -50,7 +50,7 @@ class DashKonseling extends Component
 
     public function render()
     {
-        if (Auth::user()->role === 'ADMIN') {
+        /* if (Auth::user()->role === 'ADMIN') {
             $konselings = Order::join('users', 'orders.id_user', '=', 'users.id')
                 ->leftJoin('detail_users', 'orders.id_konselor', '=', 'detail_users.id_user')
                 ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
@@ -81,9 +81,38 @@ class DashKonseling extends Component
                 ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
                 ->orderBy('orders.created_at', 'desc')
                 ->paginate($this->perPage);
-        }
+        } */
 
-
+        $konselings = $this->getOrdersByRole(Auth::user()->role, Auth::id());
         return view('livewire.dashboard.konseling', compact('konselings'));
     }
+
+    private function getOrdersByRole($role, $userId)
+    {
+        $konselings = Order::with([
+            'user.detailUser.user',
+            'konselor.detailUser.cabang',
+        ]);
+
+        switch ($role) {
+            case 'KONSELOR':
+                $konselings->where('id_konselor', $userId);
+                break;
+            
+            case 'USER':
+                $konselings->where('id_user', $userId);
+                break;
+
+            case 'CABANG':
+                $konselings->whereHas('konselor.detailUser', function ($q) use ($userId) {
+                    $q->where('id_cabang', $userId);
+                });
+                break;
+        }
+
+        return $konselings
+                    ->whereIn('orders.payment_status', ['LUNAS', 'SELESAI'])
+                    ->paginate($this->perPage);
+    }
+
 }
