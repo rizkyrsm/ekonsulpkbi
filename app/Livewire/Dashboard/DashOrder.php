@@ -107,28 +107,29 @@ class DashOrder extends Component
 
     public function render()
     {
-        if (Auth::user()->role === 'ADMIN') {
-             $orders = Order::join('users', 'orders.id_user', '=', 'users.id')
-                ->leftJoin('detail_users', 'orders.id_konselor', '=', 'detail_users.id_user')
-                ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
-                ->orderBy('orders.created_at', 'desc')
-                ->paginate($this->perPage);
-        } else if (Auth::user()->role === 'CABANG') {
-            $orders = Order::join('users', 'orders.id_user', '=', 'users.id')
-                ->leftJoin('detail_users', 'orders.id_konselor', '=', 'detail_users.id_user')
-                ->where('detail_users.id_cabang', Auth::user()->id)
-                ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
-                ->orderBy('orders.created_at', 'desc')
-                ->paginate($this->perPage);
-        } else {
-             $orders = Order::join('users', 'orders.id_user', '=', 'users.id')
-                ->where('orders.id_user', Auth::id())
-                ->join('detail_users', 'orders.id_konselor', '=', 'detail_users.id_user')
-                ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
-                ->orderBy('orders.created_at', 'desc')
-                ->paginate($this->perPage);
+        $orders = $this->getOrdersByRole(Auth::user()->role, Auth::id());
+        return view('livewire.dashboard.order', compact('orders'));
+    }
+
+    private function getOrdersByRole($role, $userId)
+    {
+        $orders = Order::with([
+            'user.detailUser.user',
+            'konselor.detailUser.cabang',
+        ]);
+
+        switch ($role) {
+            case 'USER':
+                $orders->where('id_user', $userId);
+                break;
+
+            case 'CABANG':
+                $orders->whereHas('konselor.detailUser', function ($q) use ($userId) {
+                    $q->where('id_cabang', $userId);
+                });
+                break;
         }
 
-        return view('livewire.dashboard.order', compact('orders'));
+        return $orders->paginate($this->perPage);
     }
 }

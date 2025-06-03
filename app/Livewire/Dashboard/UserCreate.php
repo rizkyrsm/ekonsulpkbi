@@ -140,7 +140,7 @@ class UserCreate extends Component
         else if ($userRole === 'USER') {
             $users = collect(); // Koleksi kosong
             return view('livewire.dashboard.user-create', compact('users'));
-        }
+        } 
         // Jika role ADMIN, tampilkan semua pengguna kecuali diri sendiri
         else if ($userRole === 'ADMIN') {
             $query->leftJoin('detail_users', 'users.id', '=', 'detail_users.id_user')

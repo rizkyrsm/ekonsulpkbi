@@ -37,7 +37,7 @@
                         <tr class="border-b hover:bg-gray-50">
                             <td class="py-3 px-6">{{ $order->id_order }}</td>
                             <td class="py-3 px-6">{{ $order->nama_layanan }}</td>
-                            <td class="py-3 px-6">{{ $order->konselor_name }}</td>
+                            <td class="py-3 px-6">{{ $order->konselor->detailUser->nama }}</td>
                             <td class="py-3 px-6">{{ $order->voucher ?? '-' }}</td>
                             <td class="py-3 px-6">Rp. {{ number_format($order->total, 0, ',', '.') }}</td>
                             <td class="py-3 px-6">
