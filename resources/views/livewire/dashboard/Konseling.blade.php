@@ -69,15 +69,16 @@
                                     @php
                                         $from_id = $konseling->id_konselor;
                                         $to_id = $konseling->id_user;
+                                        $idorder = $konseling->id_order;
                                     @endphp
 
                                     @if ($konseling->payment_status == 'SELESAI')
-                                        <button onclick="openChatPopup('{{ $from_id }}', '{{ $to_id }}')" 
+                                        <button onclick="openChatPopup('{{ $from_id }}', '{{ $to_id }}', '{{ $idorder }}')" 
                                             class="bg-blue-500 text-white px-4 py-2 rounded">
                                             <i class="bi bi-green-heart-fill"></i> Open
                                         </button>
                                     @else
-                                       <button onclick="checkProfileAndStartChat('{{ $to_id }}', '{{ $from_id }}')"
+                                       <button onclick="checkProfileAndStartChat('{{ $to_id }}', '{{ $from_id }}','{{ $idorder }}')"
                                             class="bg-blue-500 text-white px-4 py-2 rounded">
                                             <i class="bi bi-chat-heart-fill"></i> Mulai Konsultasi
                                         </button>
@@ -135,8 +136,8 @@
     </div>
 
     <script>
-        function openChatPopup(fromId, toId) {
-            const url = `/custom-chat/${fromId}/${toId}`;
+        function openChatPopup(fromId, toId, idorder) {
+            const url = `/custom-chat/${fromId}/${toId}/${idorder}`;
             document.getElementById('chatify-frame').src = url;
             document.getElementById('chatify-popup').classList.remove('hidden');
         }
@@ -157,8 +158,8 @@
             <iframe id="chat-start-frame" src="" class="w-full h-full border-none"></iframe>
         </div>
         <script>
-            function openStartChat(userId) {
-                const url = `/chatify/${userId}`; // atau endpoint chat yang sesuai untuk role konselor/user
+            function openStartChat(userId, idorder) {
+                const url = `/chatify/${userId}?idorder=${idorder}`; // atau endpoint chat yang sesuai untuk role konselor/user
                 document.getElementById('chat-start-frame').src = url;
                 document.getElementById('chat-start-popup').classList.remove('hidden');
             }
@@ -212,12 +213,12 @@
 
     {{-- CEK ISI DETAIL USER --}}
         <script>
-            function checkProfileAndStartChat(userId,konselorId) {
+            function checkProfileAndStartChat(userId,konselorId,idorder) {
                 fetch(`/check-profile/${userId}`)
                     .then(res => res.json())
                     .then(data => {
                         if (data.complete) {
-                            openStartChat(konselorId);
+                            openStartChat(konselorId, idorder);
                         } else {
                             alert('Profil Anda belum lengkap. Silakan lengkapi profil terlebih dahulu.');
                             window.location.href = 'settings/profile-detail';

@@ -11,13 +11,15 @@
         <div class="bg-white p-4 rounded shadow max-h-[500px] overflow-y-auto space-y-4">
             @php
                 $messages = \DB::table('ch_messages')
-                    ->where(function ($query) use ($from_id, $to_id) {
+                    ->where(function ($query) use ($from_id, $to_id, $idorder) {
                         $query->where('from_id', $from_id)
-                              ->where('to_id', $to_id);
+                              ->where('to_id', $to_id)
+                              ->where('id_order', $idorder);
                     })
-                    ->orWhere(function ($query) use ($from_id, $to_id) {
+                    ->orWhere(function ($query) use ($from_id, $to_id, $idorder) {
                         $query->where('from_id', $to_id)
-                              ->where('to_id', $from_id);
+                              ->where('to_id', $from_id)
+                              ->where('id_order', $idorder);
                     })
                     ->orderBy('created_at', 'asc')
                     ->get();

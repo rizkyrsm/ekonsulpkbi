@@ -48,10 +48,10 @@ Route::middleware(['auth'])->group(function () {
         ->name('konseling'); // <- pastikan ini adalah controller biasa
     Route::patch('/konseling/{id}/update-status', [DashKonseling::class, 'updateStatus'])->name('konseling.updateStatus');
 
-    Route::get('/custom-chat/{from_id}/{to_id}', function ($from_id, $to_id) {
+    Route::get('/custom-chat/{from_id}/{to_id}/{idorder}', function ($from_id, $to_id, $idorder) {
         // Lakukan autentikasi manual atau validasi dari backend
         // Redirect ke Chatify jika perlu
-        return view('custom-chat', compact('from_id', 'to_id'));
+        return view('custom-chat', compact('from_id', 'to_id', 'idorder'));
     });
 
     // untuk menampilkan profil di halaman konseling
