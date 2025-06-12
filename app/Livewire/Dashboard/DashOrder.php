@@ -5,6 +5,7 @@ namespace App\Livewire\Dashboard;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Order;
+use App\Models\Notifs;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;

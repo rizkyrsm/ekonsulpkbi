@@ -7,6 +7,7 @@ use App\Models\Layanan;
 use App\Models\Diskon;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Notif;
 use Illuminate\Support\Facades\Auth;
 
 class DashKeranjang extends Component
@@ -94,6 +95,36 @@ class DashKeranjang extends Component
                 'voucher' => $this->voucher,
                 'total' => $this->total,
                 'payment_status' => 'BELUM BAYAR',
+            ]);
+
+            // Ambil id_cabang dari detail_users berdasarkan id konselor
+            $idCabang = \DB::table('detail_users')
+                ->where('id_user', $this->konselor)
+                ->value('id_cabang');
+            
+            // Ambil id_order dari order terbaru
+            $idOrders = \DB::table('orders')
+                ->orderBy('created_at', 'desc')
+                ->value('id_order');
+            // Ambil order yang baru saja dibuat
+
+            $nama = auth()->user()->name;
+            // Simpan notifikasi ke tabel notif
+            Notif::create([
+                'keterangan' => 'Order baru telah dibuat oleh ' . $nama,
+                'id_order' => $idOrders,
+                'role' => 'ADMIN', // Sesuaikan jika peran penerima berbeda
+                'id_penerima' => 1, // Misalnya id konselor sebagai penerima
+                'status' => 'terkirim',
+            ]);
+            
+            // Simpan notifikasi ke tabel notif cabang
+            Notif::create([
+                'keterangan' => 'Order baru telah dibuat oleh ' . $nama,
+                'id_order' => $idOrders,
+                'role' => 'CABANG', // Sesuaikan jika peran penerima berbeda
+                'id_penerima' => $idCabang, // Misalnya id konselor sebagai penerima
+                'status' => 'terkirim',
             ]);
 
             session()->flash('message', 'Pesanan berhasil disimpan, Silahkan lakukan konfirmasi pembayaran jika sudah melakukan pembayaran.');
