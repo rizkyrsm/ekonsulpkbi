@@ -5,6 +5,7 @@
         {{-- Header and search bar --}}
         <div class="m-header">
             <nav>
+                <input type="hidden" name="id_order" id="id_order" value="{{ request('id_order') }}">
                 <a href="#"><i class="fas fa-inbox"></i> <span class="messenger-headTitle">EKONSUL</span> </a>
                 {{-- header buttons --}}
                 <nav class="m-header-right">
@@ -66,7 +67,7 @@
                     @php
                         $chatUser = \App\Models\User::with('detailUser')->find($id);
                     @endphp
-                    <a href="#" class="">{{ $chatUser->detailUser->nama ?? $chatUser->name }}</a>
+                    <a href="#" class="">{{ $chatUser->detailUser->nama ?? $chatUser->name }}</a>| <p>Layanan: {{ request('id_order') }}</p>
                 </div>
                 {{-- header buttons --}}
                 <nav class="m-header-right">
