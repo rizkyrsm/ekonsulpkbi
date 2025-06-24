@@ -11,6 +11,7 @@ use App\Livewire\Dashboard\DiskonCreate;
 use App\Livewire\Dashboard\DashKeranjang;
 use App\Livewire\Dashboard\DashKonseling;
 use App\Livewire\Dashboard\DashOrder;
+use App\Http\Controllers\ExtendedMessageController;
 
 Route::get('/home', [ControllerBeranda::class, 'listlayanan'])->name('home');
 
@@ -79,6 +80,10 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 
     // Route::resource('cabang', CabangController::class)->middleware('role:ADMIN,CABANG'); CONTOH jika banyak role
+
+    // Chatify routes
+    Route::post('/send', [ExtendedMessageController::class, 'send'])->name('send.message');
+    Route::post('/chatify/fetchMessages', [ExtendedMessageController::class, 'fetch'])->name('fetch.messages');
 
 });
 

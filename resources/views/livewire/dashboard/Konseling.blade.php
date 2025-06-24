@@ -76,8 +76,8 @@
 
                                     @if ($konseling->payment_status == 'SELESAI')
                                         <button onclick="openChatPopup('{{ $from_id }}', '{{ $to_id }}', '{{ $id_order }}')" 
-                                            class="bg-blue-500 text-white px-4 py-2 rounded">
-                                            <i class="bi bi-green-heart-fill"></i> Open
+                                            class="bg-green-500 text-white px-4 py-2 rounded">
+                                            <i class="bi bi-chat-heart-fill"></i> Open
                                         </button>
                                     @else
                                        <button onclick="checkProfileAndStartChat('{{ $to_id }}', '{{ $from_id }}','{{ $id_order }}')"
@@ -219,6 +219,7 @@
                 fetch(`/check-profile/${userId}`)
                     .then(res => res.json())
                     .then(data => {
+                        console.log("TEST", userId,konselorId,id_order);
                         if (data.complete) {
                             openStartChat(konselorId, id_order);
                         } else {

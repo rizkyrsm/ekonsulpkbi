@@ -16,6 +16,16 @@ $timeAndSeen = "<span data-time='$created_at' class='message-time'>
     @endif
     {{-- Card --}}
     <div class="message-card-content">
+
+        {{-- Tampilkan ID Order jika tersedia --}}
+        @if(!empty($id_order))
+            <div class="text-xs text-gray-400 mb-1 italic">
+                {{-- Order ID: #{{ $id_order }} --}}
+            </div>
+        @endif
+
+        {{-- Sender --}}
+        
         @if (@$attachment->type != 'image' || $message)
             <div class="message">
                 {!! ($message == null && $attachment != null && @$attachment->type != 'file') ? $attachment->title : nl2br($message) !!}
