@@ -542,7 +542,7 @@ function setMessagesLoading(loading = false) {
 }
 function fetchMessages(id, newFetch = false) {
   const idOrder = new URLSearchParams(window.location.search).get('id_order');
-  console.log("ID Order:", idOrder);
+  console.log("", idOrder);
 
   if (newFetch) {
     messagesPage = 1;
@@ -558,7 +558,7 @@ function fetchMessages(id, newFetch = false) {
         _token: csrfToken,
         id: id,
         page: messagesPage,
-        id_order: new URLSearchParams(window.location.search).get('id_order')
+        id_order: idOrder,
       },
       dataType: "JSON",
       success: (data) => {

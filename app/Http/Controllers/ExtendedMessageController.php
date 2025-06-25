@@ -13,10 +13,10 @@ class ExtendedMessageController extends Controller
     public function send(Request $request)
     {
         $request->validate([
-            'id' => 'required|integer', // ID lawan bicara
+            'id' => 'required|integer',
             'message' => 'nullable|string',
             'id_order' => 'nullable|integer',
-            'file' => 'nullable|file|max:10240', // 10MB max
+            'file' => 'nullable|file|max:10240',
         ]);
 
         $fromId = Auth::id();
@@ -25,14 +25,12 @@ class ExtendedMessageController extends Controller
         $idOrder = $request->input('id_order');
         $attachmentPath = null;
 
-        // Handle attachment jika ada
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
             $attachmentPath = $file->storeAs('public/chatify/attachments', $filename);
         }
 
-        // Simpan pesan
         $message = ChMessage::create([
             'id' => (string) Str::uuid(),
             'from_id' => $fromId,
@@ -40,14 +38,30 @@ class ExtendedMessageController extends Controller
             'body' => $messageBody,
             'attachment' => $attachmentPath,
             'id_order' => $idOrder,
+            'seen' => 0,
         ]);
-
+        
+        // ✅ render pesan ke HTML
+        $renderedMessage = view('vendor.Chatify.layouts.messageCard', [
+            'id' => $message->id,
+            'id_order' => $message->id_order,
+            'fromId' => $message->from_id,
+            'toId' => $message->to_id,
+            'message' => $message->body,
+            'attachment' => $message->attachment ? \Chatify\Facades\ChatifyMessenger::parseAttachment($message->attachment) : null,
+            'created_at' => $message->created_at,
+            'timeAgo' => $message->created_at->diffForHumans(),
+            'isSender' => true,
+            'seen' => 0,
+            ])->render();
+        
         return response()->json([
             'status' => 'success',
-            'message' => 'Pesan berhasil dikirim',
-            'data' => $message,
+            'message' => $renderedMessage,
+            'tempID' => $request->input('temporaryMsgId'), // dibutuhkan oleh code.js
         ]);
     }
+
 
     public function fetch(Request $request)
     {
