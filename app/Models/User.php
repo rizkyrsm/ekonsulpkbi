@@ -13,21 +13,6 @@ use Illuminate\Database\Eloquent\Collection;
 class User extends Authenticatable
 {
 
-    public function detailUser()
-    {
-        return $this->hasOne(DetailUser::class, 'id_user');
-    }
-
-    public function canCreateChats(): bool
-    {
-        return $this->hasVerifiedEmail();
-    }
-
-    public function detail()
-    {
-        return $this->hasOne(DetailUser::class, 'id_user');
-    }
-
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -75,5 +60,26 @@ class User extends Authenticatable
             ->explode(' ')
             ->map(fn(string $name) => Str::of($name)->substr(0, 1))
             ->implode('');
+    }
+
+    public function detailUser()
+    {
+        return $this->hasOne(DetailUser::class, 'id_user');
+    }
+
+    public function canCreateChats(): bool
+    {
+        return $this->hasVerifiedEmail();
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'id_user');
+    }
+
+    // 1 User juga bisa menjadi konselor di banyak Orders
+    public function konselorOrders()
+    {
+        return $this->hasMany(Order::class, 'id_konselor');
     }
 }
