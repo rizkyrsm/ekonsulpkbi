@@ -177,7 +177,7 @@
     {{-- Modal untuk user profile detail --}}
     <div id="profileModal" class="fixed inset-0 hidden z-50 flex items-center justify-center">
         <div class="bg-white dark:bg-gray-800 border rounded-lg shadow-lg w-full max-w-md p-6 relative">
-            <button onclick="closeProfileModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">&times;</button>
+            <button onclick="closeProfileModal()" class="bg-red-500 px-2 py-2 absolute top-2 right-2 text-white-500 rounded hover:text-red-800">x</button>
             <h2 class="text-xl font-bold mb-4">Detail Profil</h2>
             <div id="profileContent">
                 <p>Memuat...</p>

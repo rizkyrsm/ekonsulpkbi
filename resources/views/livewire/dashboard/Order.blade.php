@@ -73,7 +73,7 @@
                             <td class="py-3 px-6">
                                 @if($order->bukti_transfer)
                                     <a href="{{ asset('storage/' . $order->bukti_transfer) }}" target="_blank" class="bg-green-500 text-white px-2 py-1 rounded text-xs hover:bg-green-600">
-                                        Lihat Bukti
+                                        Lihat
                                     </a>
 
                                     @canRole('ADMIN','CABANG')
