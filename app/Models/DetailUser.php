@@ -33,4 +33,9 @@ class DetailUser extends Model
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+
+    public function cabang()
+    {
+        return $this->belongsTo(User::class, 'id_cabang');
+    }
 }
