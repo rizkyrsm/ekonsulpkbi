@@ -541,6 +541,9 @@ function setMessagesLoading(loading = false) {
   messagesLoading = loading;
 }
 function fetchMessages(id, newFetch = false) {
+  const idOrder = new URLSearchParams(window.location.search).get('id_order');
+  console.log("", idOrder);
+
   if (newFetch) {
     messagesPage = 1;
     noMoreMessages = false;
@@ -555,6 +558,7 @@ function fetchMessages(id, newFetch = false) {
         _token: csrfToken,
         id: id,
         page: messagesPage,
+        id_order: idOrder,
       },
       dataType: "JSON",
       success: (data) => {

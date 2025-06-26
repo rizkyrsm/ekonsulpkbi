@@ -11,6 +11,7 @@ use App\Livewire\Dashboard\DiskonCreate;
 use App\Livewire\Dashboard\DashKeranjang;
 use App\Livewire\Dashboard\DashKonseling;
 use App\Livewire\Dashboard\DashOrder;
+use App\Http\Controllers\ExtendedMessageController;
 
 Route::get('/home', [ControllerBeranda::class, 'listlayanan'])->name('home');
 
@@ -48,10 +49,10 @@ Route::middleware(['auth'])->group(function () {
         ->name('konseling'); // <- pastikan ini adalah controller biasa
     Route::patch('/konseling/{id}/update-status', [DashKonseling::class, 'updateStatus'])->name('konseling.updateStatus');
 
-    Route::get('/custom-chat/{from_id}/{to_id}', function ($from_id, $to_id) {
+    Route::get('/custom-chat/{from_id}/{to_id}/{id_order}', function ($from_id, $to_id, $id_order) {
         // Lakukan autentikasi manual atau validasi dari backend
         // Redirect ke Chatify jika perlu
-        return view('custom-chat', compact('from_id', 'to_id'));
+        return view('custom-chat', compact('from_id', 'to_id', 'id_order'));
     });
 
     // untuk menampilkan profil di halaman konseling
@@ -79,6 +80,10 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 
     // Route::resource('cabang', CabangController::class)->middleware('role:ADMIN,CABANG'); CONTOH jika banyak role
+
+    // Chatify routes
+    Route::post('/send', [ExtendedMessageController::class, 'send'])->name('send.message');
+    Route::post('/chatify/fetchMessages', [ExtendedMessageController::class, 'fetch'])->name('fetch.messages');
 
 });
 

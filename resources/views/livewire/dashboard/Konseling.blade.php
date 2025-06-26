@@ -40,9 +40,10 @@
                                     @php
                                         $from_id = $konseling->id_konselor;
                                         $to_id = $konseling->id_user;
+                                        $id_order = $konseling->id_order;
                                     @endphp
 
-                                    <button onclick="openChatPopup('{{ $from_id }}', '{{ $to_id }}')" class="bg-green-500 text-white px-4 py-2 rounded">
+                                    <button onclick="openChatPopup('{{ $from_id }}', '{{ $to_id }}', '{{ $id_order }}')" class="bg-green-500 text-white px-4 py-2 rounded">
                                         <i class="bi bi-chat-heart-fill"></i> Open
                                     </button>
                                 @endcanRole
@@ -50,15 +51,16 @@
                                     @php
                                         $from_id = $konseling->id_konselor;
                                         $to_id = $konseling->id_user;
+                                        $id_order = $konseling->id_order;
                                     @endphp
 
                                     @if ($konseling->payment_status == 'SELESAI')
-                                        <button onclick="openChatPopup('{{ $from_id }}', '{{ $to_id }}')" 
+                                        <button onclick="openChatPopup('{{ $from_id }}', '{{ $to_id }}', '{{ $id_order }}')" 
                                             class="bg-green-500 text-white px-4 py-2 rounded">
                                             <i class="bi bi-chat-heart-fill"></i> Open
                                         </button>
                                     @else
-                                        <button onclick="openStartChat('{{ $konseling->id_user }}')" 
+                                        <button onclick="openStartChat('{{ $konseling->id_user }}', '{{ $id_order }}')" 
                                             class="bg-blue-500 text-white px-4 py-2 rounded">
                                             <i class="bi bi-chat-heart-fill"></i> Mulai Konsultasi
                                         </button>
@@ -69,15 +71,16 @@
                                     @php
                                         $from_id = $konseling->id_konselor;
                                         $to_id = $konseling->id_user;
+                                        $id_order = $konseling->id_order;
                                     @endphp
 
                                     @if ($konseling->payment_status == 'SELESAI')
-                                        <button onclick="openChatPopup('{{ $from_id }}', '{{ $to_id }}')" 
-                                            class="bg-blue-500 text-white px-4 py-2 rounded">
-                                            <i class="bi bi-green-heart-fill"></i> Open
+                                        <button onclick="openChatPopup('{{ $from_id }}', '{{ $to_id }}', '{{ $id_order }}')" 
+                                            class="bg-green-500 text-white px-4 py-2 rounded">
+                                            <i class="bi bi-chat-heart-fill"></i> Open
                                         </button>
                                     @else
-                                       <button onclick="checkProfileAndStartChat('{{ $to_id }}', '{{ $from_id }}')"
+                                       <button onclick="checkProfileAndStartChat('{{ $to_id }}', '{{ $from_id }}','{{ $id_order }}')"
                                             class="bg-blue-500 text-white px-4 py-2 rounded">
                                             <i class="bi bi-chat-heart-fill"></i> Mulai Konsultasi
                                         </button>
@@ -135,8 +138,8 @@
     </div>
 
     <script>
-        function openChatPopup(fromId, toId) {
-            const url = `/custom-chat/${fromId}/${toId}`;
+        function openChatPopup(fromId, toId, id_order) {
+            const url = `/custom-chat/${fromId}/${toId}/${id_order}`;
             document.getElementById('chatify-frame').src = url;
             document.getElementById('chatify-popup').classList.remove('hidden');
         }
@@ -157,8 +160,8 @@
             <iframe id="chat-start-frame" src="" class="w-full h-full border-none"></iframe>
         </div>
         <script>
-            function openStartChat(userId) {
-                const url = `/chatify/${userId}`; // atau endpoint chat yang sesuai untuk role konselor/user
+            function openStartChat(userId, id_order) {
+                const url = `/chatify/${userId}?id_order=${id_order}`; // atau endpoint chat yang sesuai untuk role konselor/user
                 document.getElementById('chat-start-frame').src = url;
                 document.getElementById('chat-start-popup').classList.remove('hidden');
             }
@@ -212,12 +215,13 @@
 
     {{-- CEK ISI DETAIL USER --}}
         <script>
-            function checkProfileAndStartChat(userId,konselorId) {
+            function checkProfileAndStartChat(userId,konselorId,id_order) {
                 fetch(`/check-profile/${userId}`)
                     .then(res => res.json())
                     .then(data => {
+                        console.log("TEST", userId,konselorId,id_order);
                         if (data.complete) {
-                            openStartChat(konselorId);
+                            openStartChat(konselorId, id_order);
                         } else {
                             alert('Profil Anda belum lengkap. Silakan lengkapi profil terlebih dahulu.');
                             window.location.href = 'settings/profile-detail';
