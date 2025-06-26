@@ -99,7 +99,7 @@
                                 </button>
                             </td>
                             <td class="py-3 px-6">{{ $konseling->nama_layanan }}</td>
-                            <td class="py-3 px-6">{{ $konseling->konselor_name }}</td>
+                            <td class="py-3 px-6">{{ $konseling->konselor->detailUser->nama }}</td>
                             <td class="py-3 px-6">
                                 <div class="flex items-center gap-2">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
