@@ -1,8 +1,9 @@
 <?php
-$seenIcon = (!!$seen ? 'check-double' : 'check');
+$seenIcon = $seen ? 'check-double seen' : 'check';
 $timeAndSeen = "<span data-time='$created_at' class='message-time'>
-        ".($isSender ? "<span class='fas fa-$seenIcon' seen'></span>" : '' )." <span class='time'>$timeAgo</span>
-    </span>";
+    " . ($isSender ? "<span class='fas fa-$seenIcon'></span>" : "") . "
+    <span class='time'>$timeAgo</span>
+</span>";
 ?>
 
 <div class="message-card @if($isSender) mc-sender @endif" data-id="{{ $id }}">
