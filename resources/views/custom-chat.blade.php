@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gray-100">
     <div class="p-4">
-        <div class="bg-white p-4 rounded shadow max-h-[500px] overflow-y-auto space-y-4">
+        <div class="bg-white p-4 rounded shadow max-h-[550px] overflow-y-auto space-y-4">
             @php
                 $messages = \DB::table('ch_messages')
                     ->where(function ($query) use ($from_id, $to_id, $id_order) {

@@ -9,7 +9,6 @@ use App\Models\Notif;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
-use App\Events\NotifikasiDikirim;
 
 class DashOrder extends Component
 {

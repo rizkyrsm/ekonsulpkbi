@@ -13,6 +13,7 @@ use App\Livewire\Dashboard\DashKonseling;
 use App\Livewire\Dashboard\DashOrder;
 use App\Http\Controllers\ExtendedMessageController;
 
+
 Route::get('/home', [ControllerBeranda::class, 'listlayanan'])->name('home');
 
 // ✅ FIXED: pastikan hanya 1 route untuk dashboard
@@ -67,7 +68,7 @@ Route::middleware(['auth'])->group(function () {
     // sebelum chat harus melengkapi profile
     Route::get('/check-profile/{id}', function ($id) {
         $data = \App\Models\DetailUser::where('id_user', $id)->first();
-        $requiredFields = ['nama', 'nik', 'tgl_lahir', 'tempat_lahir', 'alamat', 'no_tlp', 'status_online', 'jenis_kelamin', 'status_pernikahan', 'agama','pekerjaan'];
+        $requiredFields = ['nama', 'nik', 'tgl_lahir', 'tempat_lahir', 'alamat', 'no_tlp', 'status_online', 'jenis_kelamin', 'status_pernikahan', 'agama', 'pekerjaan'];
         $isComplete = $data && collect($requiredFields)->every(fn($field) => !empty($data->$field));
         return response()->json(['complete' => $isComplete]);
     });

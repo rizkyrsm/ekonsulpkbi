@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\ChMessage;
 use Illuminate\Support\Facades\Log;
+use Chatify\Facades\ChatifyMessenger as Chatify;
 
 class ExtendedMessageController extends Controller
 {
@@ -27,8 +28,15 @@ class ExtendedMessageController extends Controller
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
-            $attachmentPath = $file->storeAs('public/chatify/attachments', $filename);
+            $oldName = $file->getClientOriginalName();
+            $newName = Str::uuid() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('attachments', $newName, 'public');
+
+            // SIMPAN JSON sesuai standar Chatify
+            $attachmentPath = json_encode([
+                'new_name' => $newName,
+                'old_name' => $oldName,
+            ]);
         }
 
         $message = ChMessage::create([
@@ -41,35 +49,36 @@ class ExtendedMessageController extends Controller
             'seen' => 0,
         ]);
 
-        // Pesan untuk pengirim (diri sendiri)
+        // Format attachment agar messageCard bisa memproses
+        $parsedAttachment = $attachmentPath ? Chatify::parseAttachment($attachmentPath) : null;
+
         $renderedMessageSender = view('vendor.Chatify.layouts.messageCard', [
             'id' => $message->id,
             'id_order' => $message->id_order,
             'fromId' => $message->from_id,
             'toId' => $message->to_id,
             'message' => $message->body,
-            'attachment' => $message->attachment ? \Chatify\Facades\ChatifyMessenger::parseAttachment($message->attachment) : null,
+            'attachment' => $parsedAttachment,
             'created_at' => $message->created_at,
             'timeAgo' => $message->created_at->diffForHumans(),
             'isSender' => true,
             'seen' => 0,
         ])->render();
 
-        // Pesan untuk penerima (dikirim via Pusher)
         $renderedMessageReceiver = view('vendor.Chatify.layouts.messageCard', [
             'id' => $message->id,
             'id_order' => $message->id_order,
             'fromId' => $message->from_id,
             'toId' => $message->to_id,
             'message' => $message->body,
-            'attachment' => $message->attachment ? \Chatify\Facades\ChatifyMessenger::parseAttachment($message->attachment) : null,
+            'attachment' => $parsedAttachment,
             'created_at' => $message->created_at,
             'timeAgo' => $message->created_at->diffForHumans(),
             'isSender' => false,
             'seen' => 0,
         ])->render();
 
-        // Kirim ke Pusher untuk real-time muncul di penerima
+        // Trigger ke Pusher
         try {
             $pusher = new \Pusher\Pusher(
                 config('broadcasting.connections.pusher.key'),
@@ -108,13 +117,15 @@ class ExtendedMessageController extends Controller
 
         $response = '';
         foreach ($messages as $msg) {
+            $attachment = $msg->attachment ? \Chatify\Facades\ChatifyMessenger::parseAttachment($msg->attachment) : null;
+
             $response .= view('vendor.Chatify.layouts.messageCard', [
                 'id' => $msg->id,
                 'id_order' => $msg->id_order,
                 'fromId' => $msg->from_id,
                 'toId' => $msg->to_id,
                 'message' => $msg->body,
-                'attachment' => $msg->attachment ? Chatify::parseAttachment($msg->attachment) : null,
+                'attachment' => $attachment,
                 'created_at' => $msg->created_at,
                 'timeAgo' => $msg->created_at->diffForHumans(),
                 'isSender' => $msg->from_id == $userId,

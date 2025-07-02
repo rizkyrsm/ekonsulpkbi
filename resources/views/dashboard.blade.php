@@ -57,6 +57,8 @@
         @endcanRole
         
     </div>
+    <livewire:notif-badge />
+
 </x-layouts.app>
 
 
