@@ -83,8 +83,13 @@ Route::middleware(['auth'])->group(function () {
     // Route::resource('cabang', CabangController::class)->middleware('role:ADMIN,CABANG'); CONTOH jika banyak role
 
     // Chatify routes
+    // Route::post('/send', [ExtendedMessageController::class, 'send'])->name('send.message');
+    // Route::post('/chatify/fetchMessages', [ExtendedMessageController::class, 'fetch'])->name('fetch.messages');
+
     Route::post('/send', [ExtendedMessageController::class, 'send'])->name('send.message');
     Route::post('/chatify/fetchMessages', [ExtendedMessageController::class, 'fetch'])->name('fetch.messages');
+
+
 
 });
 

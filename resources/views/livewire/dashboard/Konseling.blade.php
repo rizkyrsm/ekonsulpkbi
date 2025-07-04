@@ -1,6 +1,5 @@
 <div class="container mx-auto p-4">
     <h2 class="text-2xl font-bold mb-4">History Konseling</h2>
-
     @if ($konselings->isEmpty())
         <div class="bg-yellow-100 text-yellow-800 p-3 rounded mb-4">
             Tidak ada konseling ditemukan.
