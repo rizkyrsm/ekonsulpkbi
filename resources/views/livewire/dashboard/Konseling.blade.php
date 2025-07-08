@@ -59,9 +59,9 @@
                                             <i class="bi bi-chat-heart-fill"></i> Open
                                         </button>
                                     @else
-                                        <button onclick="openStartChat('{{ $konseling->id_user }}', '{{ $id_order }}')" 
-                                            class="bg-blue-500 text-white px-4 py-2 rounded">
-                                            <i class="bi bi-chat-heart-fill"></i> Mulai Konsultasi
+                                            <button onclick="openStartChat('{{ $konseling->id_user }}', '{{ $id_order }}')" 
+                                            class="bg-blue-500 text-white px-4 py-2 rounded"> Mulai Konsultasi
+                                            <livewire:message-notif :user-id="$konseling->id_user" :order-id="$id_order" />
                                         </button>
                                     @endif
                                 @endcanRole
@@ -80,8 +80,8 @@
                                         </button>
                                     @else
                                        <button onclick="checkProfileAndStartChat('{{ $to_id }}', '{{ $from_id }}','{{ $id_order }}')"
-                                            class="bg-blue-500 text-white px-4 py-2 rounded">
-                                            <i class="bi bi-chat-heart-fill"></i> Mulai Konsultasi
+                                            class="bg-blue-500 text-white px-4 py-2 rounded"> Mulai Konsultasi
+                                            <livewire:message-notif :user-id="$konseling->id_konselor" :order-id="$id_order" />
                                         </button>
                                     @endif
                                 @endcanRole
