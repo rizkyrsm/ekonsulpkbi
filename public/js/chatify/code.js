@@ -1595,7 +1595,7 @@ $(document).ready(function () {
   });
 
   //Messages pagination
-  actionOnScroll(
+  /* actionOnScroll(
     ".m-body.messages-container",
     function () {
       fetchMessages(getMessengerId());
@@ -1609,7 +1609,7 @@ $(document).ready(function () {
   //Search pagination
   actionOnScroll(".messenger-tab.search-tab", function () {
     messengerSearch($(".messenger-search").val());
-  });
+  }); */
 });
 
 /**
