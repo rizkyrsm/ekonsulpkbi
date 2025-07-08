@@ -90,6 +90,7 @@ class ExtendedMessageController extends Controller
             'message' => $renderedMessageSender,
             'tempID' => $request->input('temporaryMsgId'),
         ]);
+
     }
 
     public function fetch(Request $request)

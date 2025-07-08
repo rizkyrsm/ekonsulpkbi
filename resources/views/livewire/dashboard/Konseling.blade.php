@@ -142,7 +142,7 @@
             document.getElementById('chatify-frame').src = url;
             document.getElementById('chatify-popup').classList.remove('hidden');
         }
-
+        
         function closeChatPopup() {
             document.getElementById('chatify-frame').src = '';
             document.getElementById('chatify-popup').classList.add('hidden');

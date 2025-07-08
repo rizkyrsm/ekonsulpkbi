@@ -1,6 +1,9 @@
 <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
 <x-layouts.app :title="__('Dashboard')">
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+
+            <livewire:notif-badge />
+    
         <!-- Card Statistik -->
         @canRole('ADMIN')
         <div class="grid auto-rows-min gap-4 md:grid-cols-3">
@@ -57,7 +60,6 @@
         @endcanRole
         
     </div>
-    <livewire:notif-badge />
 
 </x-layouts.app>
 

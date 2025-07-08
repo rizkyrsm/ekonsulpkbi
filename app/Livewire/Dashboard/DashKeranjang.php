@@ -126,6 +126,15 @@ class DashKeranjang extends Component
                 'id_penerima' => $idCabang, // Misalnya id konselor sebagai penerima
                 'status' => 'terkirim',
             ]);
+            
+            // Simpan notifikasi ke tabel notif konselor
+            Notif::create([
+                'keterangan' => 'Siap" Memulai Konseling Order baru telah dibuat ' . $nama,
+                'id_order' => $idOrders,
+                'role' => 'KONSELOR', // Sesuaikan jika peran penerima berbeda
+                'id_penerima' => $this->konselor, // Misalnya id konselor sebagai penerima
+                'status' => 'terkirim',
+            ]);
 
             session()->flash('message', 'Pesanan berhasil disimpan, Silahkan lakukan konfirmasi pembayaran jika sudah melakukan pembayaran.');
             return redirect()->route('orders');

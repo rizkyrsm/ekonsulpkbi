@@ -100,6 +100,25 @@ class DashOrder extends Component
             'status'       => 'terkirim',
         ]);
 
+        if($this->newStatus === 'LUNAS') {
+            // Simpan notifikasi untuk konselor jika statusnya LUNAS
+            $notif = Notif::create([
+                'keterangan'   => 'Segera Melakukan Konseling order #' . $order->id_order . ' telah disetujui.',
+                'id_order'     => $order->id_order,
+                'role'         => 'KONSELOR',
+                'id_penerima'  => $order->id_konselor, // ganti dengan id konselor sebenarnya
+                'status'       => 'terkirim',
+            ]);
+
+            $notif = Notif::create([
+                'keterangan'   => 'Segera Info Konselor Untuk Konseling order #' . $order->id_order,
+                'id_order'     => $order->id_order,
+                'role'         => 'CABANG',
+                'id_penerima'  => $order->konselor->detailUser->id_cabang, // ganti dengan id cabang konselor
+                'status'       => 'terkirim',
+            ]);
+        }
+        
         session()->flash('success', 'Status pembayaran berhasil diperbarui.');
         $this->cancelEditStatus();
         
