@@ -5,6 +5,7 @@ namespace App\Livewire\Dashboard;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Order;
+use App\Models\Notif;
 use Illuminate\Support\Facades\Auth;
 
 class DashKonseling extends Component
@@ -18,6 +19,24 @@ class DashKonseling extends Component
             $konseling->payment_status = 'SELESAI';
             $konseling->save();
         }
+
+        // Simpan notifikasi
+        $notif = Notif::create([
+            'keterangan'   => 'Konsultasi Diselesaikan #' . $konseling->id_order . ', Terimakasih ',
+            'id_order'     => $konseling->id_order,
+            'role'         => 'USER',
+            'id_penerima'  => $konseling->id_user,
+            'status'       => 'terkirim',
+        ]);
+        
+        // Simpan notifikasi
+        $notif = Notif::create([
+            'keterangan'   => 'Konsultasi Diselesaikan #' . $konseling->id_order,
+            'id_order'     => $konseling->id_order,
+            'role'         => 'ADMIN',
+            'id_penerima'  => 1,
+            'status'       => 'terkirim',
+        ]);
 
         return back()->with('success', 'Status berhasil diperbarui menjadi SELESAI.');
     }

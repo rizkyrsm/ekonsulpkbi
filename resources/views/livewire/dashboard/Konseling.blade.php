@@ -94,7 +94,8 @@
                                     onclick="showProfileModal({{ $konseling->id_user }})" 
                                     class="ml-2 text-sm text-blue-600 hover:underline"
                                 >
-                                    <span class="px-5 text-white inline-flex text-xs leading-5 font-semibold rounded bg-yellow-500">{{ $konseling->user->detailUser->nama }} </span>
+                                    {{-- <span class="px-5 text-white inline-flex text-xs leading-5 font-semibold rounded bg-yellow-500">{{ $konseling->user->detailUser->nama }} </span> --}}
+                                    <span class="px-5 text-white inline-flex text-xs leading-5 font-semibold rounded bg-yellow-500">{{ $konseling->user->name }} </span>
                                 </button>
                             </td>
                             <td class="py-3 px-6">{{ $konseling->nama_layanan }}</td>
