@@ -14,7 +14,7 @@ use App\Livewire\Dashboard\DashOrder;
 use App\Http\Controllers\ExtendedMessageController;
 
 
-Route::get('/home', [ControllerBeranda::class, 'listlayanan'])->name('home');
+Route::get('/beranda', [ControllerBeranda::class, 'listlayanan'])->name('beranda');
 
 // ✅ FIXED: pastikan hanya 1 route untuk dashboard
 Route::get('/dashboard', [DashController::class, 'index'])
@@ -22,6 +22,7 @@ Route::get('/dashboard', [DashController::class, 'index'])
     ->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
+    
     Route::get('/', function () {
         return redirect()->route('dashboard');
     })->name('home');
