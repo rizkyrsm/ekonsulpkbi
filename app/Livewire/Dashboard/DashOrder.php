@@ -149,7 +149,7 @@ class DashOrder extends Component
     public function render()
     {
         $orders = $this->getOrdersByRole(Auth::user()->role, Auth::id());
-        return view('livewire.dashboard.order', compact('orders'));
+        return view('livewire.dashboard.Order', compact('orders'));
     }
 
     private function getOrdersByRole($role, $userId)

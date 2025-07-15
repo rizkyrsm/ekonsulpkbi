@@ -103,7 +103,7 @@ class DashKonseling extends Component
         } */
 
         $konselings = $this->getOrdersByRole(Auth::user()->role, Auth::id());
-        return view('livewire.dashboard.konseling', compact('konselings'));
+        return view('livewire.dashboard.Konseling', compact('konselings'));
     }
 
     private function getOrdersByRole($role, $userId)
