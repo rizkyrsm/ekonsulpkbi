@@ -36,7 +36,7 @@
         class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full shadow-lg relative focus:outline-none flex items-center gap-2"
     >
         🔔
-        <span class="hidden sm:inline">Notifikasi</span>
+        <span class="inline">Notifikasi</span>
         @if ($count > 0)
             <span class="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full px-1">
                 {{ $count }}

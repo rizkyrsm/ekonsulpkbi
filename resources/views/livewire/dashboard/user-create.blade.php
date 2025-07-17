@@ -104,49 +104,58 @@
         </div>
 
         {{-- Table --}}
-        <table class="min-w-full text-sm text-left border">
-            <thead class="bg-gray-100 text-gray-700 font-semibold">
+<div class="overflow-x-auto">
+    <table class="min-w-full text-sm text-left border">
+        <thead class="bg-gray-100 text-gray-700 font-semibold">
+            <tr>
+                <th class="py-2 px-3">Username</th>
+                <th class="py-2 px-3">Cabang</th>
+                <th class="py-2 px-3">Email</th>
+                <th class="py-2 px-3">Role</th>
+                <th class="py-2 px-3">Aksi</th>
+                <th class="py-2 px-3">Status</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            @forelse ($users as $user)
                 <tr>
-                    <th class="py-2 px-3">Username</th>
-                    <th class="py-2 px-3">Cabang</th>
-                    <th class="py-2 px-3">Email</th>
-                    <th class="py-2 px-3">Role</th>
-                    <th class="py-2 px-3">Aksi</th>
-                    <th class="py-2 px-3">Status</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200">
-                @forelse ($users as $user)
-                    <tr>
-                        <td class="py-2 px-3">{{ $user->name }} </td>
-                        <td class="py-2 px-3">{{ $user->cabang_name ?? '' }} </td>
-                        <td class="py-2 px-3">{{ $user->email }}</td>
-                        <td class="py-2 px-3 capitalize">{{ $user->role }}</td>
-                        <td class="py-2 px-3 space-x-2">
-                            <button wire:click="edit({{ $user->id }})" class="text-blue-600 hover:bg-sky-100 hover:underline"><x-heroicon-o-pencil-square class="w-5 h-5 text-blue-700" /></button>
-                            <button wire:click="delete({{ $user->id }})" wire:confirm="Apakah Anda yakin ingin menghapus user ini?" class="text-red-600 hover:bg-red-100 hover:underline"><x-heroicon-o-trash class="w-5 h-5 text-red-700" /></button>
-                        </td>
-                        <td class="py-2 px-3 space-x-2">
-                            <button wire:click="toggleStatus({{ $user->id }})" class="text-sm px-2 py-1 rounded {{ $user->status === 'ACTIVE' ? 'bg-green-500 text-white' : 'bg-red-400 text-white' }}">
-                                {{ $user->status === 'ACTIVE' ? 'ACTIVE' : 'NONACTIVE' }}
-                            </button>
+                    <td class="py-2 px-3">{{ $user->name }}</td>
+                    <td class="py-2 px-3">{{ $user->cabang_name ?? '' }}</td>
+                    <td class="py-2 px-3">{{ $user->email }}</td>
+                    <td class="py-2 px-3 capitalize">{{ $user->role }}</td>
+                    <td class="py-2 px-3 space-x-2">
+                        <button wire:click="edit({{ $user->id }})" class="text-blue-600 hover:bg-sky-100 hover:underline">
+                            <x-heroicon-o-pencil-square class="w-5 h-5 text-blue-700" />
+                        </button>
+                        <button wire:click="delete({{ $user->id }})" wire:confirm="Apakah Anda yakin ingin menghapus user ini?" class="text-red-600 hover:bg-red-100 hover:underline">
+                            <x-heroicon-o-trash class="w-5 h-5 text-red-700" />
+                        </button>
+                    </td>
+                    <td class="py-2 px-3 space-x-2">
+                        <button wire:click="toggleStatus({{ $user->id }})" class="text-sm px-2 py-1 rounded {{ $user->status === 'ACTIVE' ? 'bg-green-500 text-white' : 'bg-red-400 text-white' }}">
+                            {{ $user->status === 'ACTIVE' ? 'ACTIVE' : 'NONACTIVE' }}
+                        </button>
                         @canRole('CABANG')
-                            <button wire:click="toggleStatusChat({{ $user->id }})" class="text-sm px-2 py-1 rounded {{ $user->status_online === 'online' ? 'bg-green-500 text-white' : 'bg-red-400 text-white' }}">
-                                <i class="bi bi-wifi"></i> {{ $user->status_online === 'online' ? 'online' : 'offline' }}
-                            </button>
+                        <button wire:click="toggleStatusChat({{ $user->id }})" class="text-sm px-2 py-1 rounded {{ $user->status_online === 'online' ? 'bg-green-500 text-white' : 'bg-red-400 text-white' }}">
+                            <i class="bi bi-wifi"></i> {{ $user->status_online === 'online' ? 'online' : 'offline' }}
+                        </button>
                         @endcanRole
                         @canRole('ADMIN')
-                            <span class="text-sm px-2 py-1 rounded {{ $user->status_online === 'online' ? 'bg-green-500 text-white' : 'bg-red-400 text-white' }}">
-                                {{ $user->status_online === 'online' ? 'online' : 'offline' }}
-                            </span>
+                        <span class="text-sm px-2 py-1 rounded {{ $user->status_online === 'online' ? 'bg-green-500 text-white' : 'bg-red-400 text-white' }}">
+                            {{ $user->status_online === 'online' ? 'online' : 'offline' }}
+                        </span>
                         @endcanRole
-                        </td>
-                    </tr>
-                @empty
-                    <tr><td colspan="4" class="py-4 text-center text-gray-500">Tidak ada data ditemukan.</td></tr>
-                @endforelse
-            </tbody>
-        </table>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="6" class="py-4 text-center text-gray-500">Tidak ada data ditemukan.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
 
         {{-- Pagination --}}
         <div class="mt-4">

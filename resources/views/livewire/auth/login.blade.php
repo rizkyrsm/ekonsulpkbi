@@ -75,7 +75,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
 ?>
 
-<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-6 border border-zinc-500 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
     <x-auth-header :title="__('Masuk ke akun anda')" :description="__('Masukan email & password anda')" />
 
     <!-- Session Status -->
@@ -84,8 +84,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
     <form wire:submit="login" class="flex flex-col gap-6">
         <!-- Email Address -->
         <flux:input
+            bordered
             wire:model="email"
-            :label="__('Email address')"
+            :label="__('Alamat Email')"
             type="email"
             required
             autofocus

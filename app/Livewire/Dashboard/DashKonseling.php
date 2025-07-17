@@ -69,39 +69,6 @@ class DashKonseling extends Component
 
     public function render()
     {
-        /* if (Auth::user()->role === 'ADMIN') {
-            $konselings = Order::join('users', 'orders.id_user', '=', 'users.id')
-                ->leftJoin('detail_users', 'orders.id_konselor', '=', 'detail_users.id_user')
-                ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
-                ->whereIn('orders.payment_status', ['LUNAS', 'SELESAI'])
-                ->orderBy('orders.created_at', 'desc')
-                ->paginate($this->perPage);
-        } else if (Auth::user()->role === 'CABANG') {
-            $konselings = Order::join('users', 'orders.id_user', '=', 'users.id')
-                ->leftJoin('detail_users', 'orders.id_konselor', '=', 'detail_users.id_user')
-                ->where('detail_users.id_cabang', Auth::user()->id)
-                ->whereIn('orders.payment_status', ['LUNAS', 'SELESAI'])
-                ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
-                ->orderBy('orders.created_at', 'desc')
-                ->paginate($this->perPage);
-        } else if (Auth::user()->role === 'KONSELOR') {
-            $konselings = Order::join('users', 'orders.id_user', '=', 'users.id')
-                ->leftJoin('detail_users', 'orders.id_konselor', '=', 'detail_users.id_user')
-                ->where('orders.id_konselor', Auth::id())
-                ->whereIn('orders.payment_status', ['LUNAS', 'SELESAI'])
-                ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
-                ->orderBy('orders.created_at', 'desc')
-                ->paginate($this->perPage);
-        } else {
-            $konselings = Order::join('users', 'orders.id_user', '=', 'users.id')
-                ->join('detail_users', 'orders.id_konselor', '=', 'detail_users.id_user')
-                ->where('orders.id_user', Auth::id())
-                ->whereIn('orders.payment_status', ['LUNAS', 'SELESAI'])
-                ->select('orders.*', 'users.name as user_name', 'users.email as user_email', 'detail_users.nama as konselor_name')
-                ->orderBy('orders.created_at', 'desc')
-                ->paginate($this->perPage);
-        } */
-
         $konselings = $this->getOrdersByRole(Auth::user()->role, Auth::id());
         return view('livewire.dashboard.Konseling', compact('konselings'));
     }

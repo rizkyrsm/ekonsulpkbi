@@ -24,7 +24,7 @@
               </li>
             </ul>
             <span class="navbar-brand">
-              <a href="{{ route('login') }}" class="nav-link">Login <i class="bi bi-door-open-fill"></i></a>
+              <a href="{{ route('login') }}" class="nav-link">Masuk/Daftar <i class="bi bi-door-open-fill"></i></a>
             </span>
           </div>
         </div>
@@ -33,20 +33,25 @@
       <div class="container-md mt-4">
         <h2 class="mb-4">Daftar Layanan</h2>
     
-        <div class="d-flex flex-wrap gap-3">
-            @foreach($layanans as $index => $layanan)
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $layanan->nama_layanan }}</h5>
-                        <h6 class="card-subtitle mb-2 text-body-secondary">VOUCHER : PKBIJAYA</h6>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <br><s>Rp. {{ $layanan->harga_layanan }}</s>/Rp.0
-                        <a href="{{ route('dashboard.keranjang', ['id' => $layanan->id_layanan]) }}" class="btn btn-success text-white card-link"><i class="bi bi-chat-heart-fill"></i> Mulai Konseling</a>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+          @foreach($layanans as $index => $layanan)
+              <div class="card" style="width: 18rem;">
+                  <div class="card-body">
+                      <h5 class="card-title text-white px-2 py-1 mb-2" style="background-color: {{ $layanan->warna_layanan }};">
+                          {{ $layanan->nama_layanan }}
+                      </h5>
+                      <h6 class="card-subtitle mb-2 text-body-secondary">VOUCHER : PKBIJAYA</h6>
+                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                      <br><s>Rp. {{ $layanan->harga_layanan }}</s>/Rp.0
+                      <a href="{{ route('dashboard.keranjang', ['id' => $layanan->id_layanan]) }}" class="btn btn-success text-white card-link">
+                          <i class="bi bi-chat-heart-fill"></i> Mulai Konseling
+                      </a>
+                  </div>
+              </div>
+          @endforeach
+      </div>
+
+      </div>
     
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
