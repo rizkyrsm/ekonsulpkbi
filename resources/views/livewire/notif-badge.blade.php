@@ -75,3 +75,10 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('livewire:load', function () {
+        window.addEventListener('redirect', function (event) {
+            window.location.href = event.detail.url;
+        });
+    });
+</script>

@@ -91,12 +91,12 @@
     </div>
 
     {{-- CEK ISI DETAIL USER --}}
-        <div id="chat-start-popup" class="fixed bottom-10 right-4 w-100 h-[650px] bg-white shadow-xl hidden z-50">
+        <div id="chat-start-popup" style="z-index:9999;" class="fixed bottom-10 right-4 w-100 h-[650px] bg-white shadow-xl hidden z-50">
             <div class="flex justify-between items-center text-white p-2 bg-green-800 border-b">
                 <h1 class="text-xl font-bold mb-4">Chat</h1>
                 <flux:button onclick="closeStartChatPopup()" icon="x-mark" variant="danger" size="sm"></flux:button>
             </div>
-            <iframe id="chat-start-frame" src="" class="w-full h-full border-none"></iframe>
+            <iframe id="chat-start-frame" style="z-index:9999;" src="" class="w-full h-full border-none"></iframe>
         </div>
         <script>
             function openStartChat(userId, id_order) {

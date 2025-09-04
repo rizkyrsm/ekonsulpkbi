@@ -30,22 +30,18 @@ class NotifBadge extends Component
             $notif->status = 'terbaca';
             $notif->save();
 
-            // Jika role adalah konselor, arahkan ke konseling
-            if (Auth::user()->role === 'KONSELOR') {
-                return redirect()->route('konseling', ['id' => $notif->id_order]);
+            // Tentukan rute tujuan
+            $route = route('orders', ['id' => $notif->id_order]);
+
+            if (Auth::user()->role === 'KONSELOR' || stripos($notif->keterangan, 'LUNAS') !== false) {
+                $route = route('konseling', ['id' => $notif->id_order]);
             }
 
-            // Jika keterangan mengandung kata 'LUNAS', arahkan ke konseling
-            if (stripos($notif->keterangan, 'LUNAS') !== false) {
-                return redirect()->route('konseling', ['id' => $notif->id_order]);
-            }
-
-            // Default: arahkan ke halaman orders
-            return redirect()->route('orders', ['id' => $notif->id_order]);
+            // Kirim event redirect ke browser
+            $this->dispatch('redirect', url: $route);
         }
-
-        return null;
     }
+
 
 
     public function render()
